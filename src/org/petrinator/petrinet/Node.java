@@ -34,7 +34,7 @@ public abstract class Node extends Element implements Comparable<Node> {
 
     private String id;
     private String label;
-    private String behavior = "<F,I,(!chota)>";
+    private String behavior = "<F,I,(!none)>";
     
 
     public Node() 

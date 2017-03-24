@@ -295,7 +295,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
 
     //per application
     private JToggleButton select, place, transition, arc, token;
-    private Action setLabel, setTokens, setArcMultiplicity, setArcInhibitory, setArcReset, delete;
+    private Action setLabel, setBehavior, setTokens, setArcMultiplicity, setArcInhibitory, setArcReset, delete;
     private Action setPlaceStatic;
     private Action addSelectedTransitionsToSelectedRoles;
     private Action removeSelectedTransitionsFromSelectedRoles;
@@ -364,6 +364,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         setArcReset.setEnabled(isPtoT);
         setTokens.setEnabled(isPlaceNode);
         setLabel.setEnabled(isPlaceNode || isTransitionNode);
+        setBehavior.setEnabled(isPlaceNode || isTransitionNode);
         addSelectedTransitionsToSelectedRoles.setEnabled((isTransitionNode || areTransitionNodes) && roleSelected);
         removeSelectedTransitionsFromSelectedRoles.setEnabled((isTransitionNode || areTransitionNodes) && roleSelected);
         convertTransitionToSubnet.setEnabled(isTransition || areTransitions || isSubnet || areSubnets);
@@ -467,7 +468,9 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         Action exportFile = new ExportAction(this, exportFiletypes);
         Action simulateNet = new SimulateAction(this, simulateFileTypes);
         Action quit = new QuitAction(this);
+        Action seeBehaviorAction = new BehaviorAction(this);
         setLabel = new SetLabelAction(this);
+        setBehavior = new SetBehaviorAction(this);
         setTokens = new SetTokensAction(this);
         setPlaceStatic = new SetPlaceStaticAction(this);
         setArcMultiplicity = new SetArcMultiplicityAction(this);
@@ -554,6 +557,10 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('F');
         menuBar.add(fileMenu);
+        
+        JMenu viewMenu = new JMenu("View");
+        viewMenu.setMnemonic('V');
+        menuBar.add(viewMenu);
 
         JMenu editMenu = new JMenu("Edit");
         editMenu.setMnemonic('E');
@@ -597,6 +604,8 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         fileMenu.add(exportFile);
         fileMenu.addSeparator();
         fileMenu.add(quit);
+        
+        viewMenu.add(seeBehaviorAction);
 
         editMenu.add(undo);
         editMenu.add(redo);
@@ -643,6 +652,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
 
         transitionPopup = new JPopupMenu();
         transitionPopup.add(setLabel);
+        transitionPopup.add(setBehavior);
         transitionPopup.add(convertTransitionToSubnet);
         transitionPopup.add(addSelectedTransitionsToSelectedRoles);
         transitionPopup.add(removeSelectedTransitionsFromSelectedRoles);

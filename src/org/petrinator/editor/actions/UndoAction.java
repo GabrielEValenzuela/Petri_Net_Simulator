@@ -28,7 +28,7 @@ import org.petrinator.editor.Root;
 
 /**
  *
- * @author Martin Riesz <riesz.martin at gmail.com>
+ * @author Martin Riesz riesz.martin at gmail.com
  */
 public class UndoAction extends AbstractAction {
 

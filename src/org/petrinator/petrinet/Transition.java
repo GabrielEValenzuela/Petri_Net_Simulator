@@ -30,6 +30,8 @@ import org.petrinator.util.GraphicsTools.VerticalAlignment;
  */
 public class Transition extends TransitionNode implements Cloneable {
 
+	static boolean showBehavior = false;
+	
     @Override
     public void draw(Graphics g, DrawingOptions drawingOptions) {
         g.setColor(Color.white);
@@ -45,6 +47,17 @@ public class Transition extends TransitionNode implements Cloneable {
 //          GraphicsTools.drawString(g, getLabel(), getCenter().x, getCenter().y, HorizontalAlignment.center, VerticalAlignment.center, new Font("Times", Font.BOLD, 24));
             GraphicsTools.drawString(g, getLabel(), getCenter().x, getEnd().y, HorizontalAlignment.center, VerticalAlignment.top);
         }
+        if(showBehavior)
+        {
+            GraphicsTools.drawString(g, getBehavior(), getCenter().x, getEnd().y+10, HorizontalAlignment.center, VerticalAlignment.top);
+
+        }
 //      GraphicsTools.drawString(g, getId(), getCenter().x, getStart().y, HorizontalAlignment.center, VerticalAlignment.bottom);
     }
+    
+    public void setShowBehavior(boolean s)
+    {
+    	showBehavior = s;
+    }
+    	
 }
