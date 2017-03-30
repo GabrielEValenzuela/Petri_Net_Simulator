@@ -27,7 +27,8 @@ public class NodeIdGenerator {
     static private int nextUniqueSubnetNumber = 1;
     static private int nextUniqueReferencePlaceNumber = 1;
 
-    public void setUniqueId(Node node) {
+    public void setUniqueId(Node node)
+    {
         String id;
         if (node instanceof Place) {
             id = "P" + Integer.toString(nextUniquePlaceNumber++);

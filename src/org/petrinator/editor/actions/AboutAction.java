@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaquín Rodríguez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquï¿½n Rodrï¿½guez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -43,14 +43,14 @@ public class AboutAction extends AbstractAction {
 
     public void actionPerformed(ActionEvent e) {
         JOptionPane.showOptionDialog(
-                root.getParentFrame(),  "                                                      " + "Universidad Nacional de Córdoba, Argentina\n" + 
+                root.getParentFrame(),  "                                                      " + "Universidad Nacional de Cordoba, Argentina\n" +
                 root.getAppLongName() + "\n" 
                 + "\n"
-                + "Authors: \n Joaquín Rodriguez Felici\n	Leandro Asson \n\n"
+                + "Authors: \nJoaquin Rodriguez Felici\n	Leandro Asson \n\n"
                 + "Contributors:\n"
                 + "Martin Riesz (PNEditor)\n"
                 + "Milka Knaperekova (Boundedness algorithm)\n"
-                + "JÃin TanÄibok (Reset and inhibitor arc types)\n"
+                + "Jï¿½in Tanï¿½ibok (Reset and inhibitor arc types)\n"
                 + "\n"
                 + "This program is free software:  you can redistribute it and/or modify          \n"
                 + "it under the terms of the GNU General Public License as published by\n"

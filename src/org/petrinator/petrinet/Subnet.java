@@ -139,7 +139,7 @@ public class Subnet extends TransitionNode {
         System.out.print("[  ");
         for(int i=0; i<lista.size(); i++)
         	if(lista.get(i) instanceof Place || lista.get(i) instanceof Transition)
-        		System.out.print(((Node) lista.get(i)).getLabel() +"  ");
+        		System.out.print(((Node) lista.get(i)).getId() +"  ");
         	else if(lista.get(i) instanceof Edge)
         		System.out.print("A(" +((ArcEdge) lista.get(i)).getSource().getId() + "->" +((ArcEdge) lista.get(i)).getDestination().getId() + ")    ");
         System.out.println("]");
@@ -154,9 +154,12 @@ public class Subnet extends TransitionNode {
         elements.clear();
     }
 
-    public void addAll(Set<Element> elements) {
-        for (Element element : elements) 
-        	addElement(element);
+    public void addAll(Set<Element> elements)
+    {
+        for (Element element : elements)
+        {
+            addElement(element);
+        }
     }
 
     public void removeAll(Set<Element> elements) {

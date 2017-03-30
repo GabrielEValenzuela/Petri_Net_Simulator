@@ -4,9 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Set;
 
-import org.petrinator.petrinet.Element;
-import org.petrinator.petrinet.PetriNet;
-import org.petrinator.petrinet.Subnet;
+import org.petrinator.petrinet.*;
 import org.petrinator.util.Command;
 
 /**
@@ -31,8 +29,8 @@ public class PasteCommand implements Command {
         }
     }
 
-    public void execute() {
-    	//TODO: Hacer un for para recorrer los elementos agregados y asignarles un nuevo ID. Sino, usa el mismo ID del original.
+    public void execute()
+    {
         subnet.addAll(elements);
     }
 

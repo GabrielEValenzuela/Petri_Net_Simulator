@@ -52,14 +52,14 @@ public class ConcreteObserver implements Observer<String>
 	 * @brief This funcion is called everytime a transition is fired
 	 * @see rx.Observer#onNext(java.lang.Object)
 	 */
-	@Override
+/*	@Override
 	public void onNext(String event) 
 	{
 		eventsRecieved.add(event);
 		
-		/*
+		*//*
 		 * Extract transition's ID from the JSON event.
-		 */
+		 *//*
 		List<String> transitionInfo = Arrays.asList(event.split(","));
 		String transitionId = transitionInfo.get(2);
 		transitionId = transitionId.replace("\"","");
@@ -68,19 +68,25 @@ public class ConcreteObserver implements Observer<String>
 		
 		System.out.println(transitionId + " was fired!");
 		
-		/*
+		*//*
 		 * Obtain transition object from the ID and the marking
-		 */
+		 *//*
 		Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
 		Marking marking = root.getDocument().petriNet.getInitialMarking();
 		
-		/*
+		*//*
 		 * Graphically fire the transition 
-		 */
+		 *//*
 		FireTransitionCommand fire = new FireTransitionCommand(transition,marking);
 		fire.execute();
 		root.refreshAll();
 		
+	}*/
+
+	@Override
+	public void onNext(String event)
+	{
+		eventsRecieved.add(event);
 	}
 	
 	/**
