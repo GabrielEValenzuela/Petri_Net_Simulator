@@ -60,7 +60,7 @@ public class SetBehaviorAction extends AbstractAction{
             myPanel.add(new JLabel("Guard:  "));
             myPanel.add(new JLabel ("    "));
             myPanel.add(guard,"wrap");
-            myPanel.add(new JLabel("Initial State:"));
+            myPanel.add(new JLabel("Enable when true:"));
             myPanel.add(new JLabel (" "));
             myPanel.add(checkBoxsInitialState);    
             
@@ -101,7 +101,7 @@ public class SetBehaviorAction extends AbstractAction{
      * @param automatic value that determines if the transition is automatic.
      * @param informed value that determines if the transition is informed.
      * @param guardValue Name of the guard.
-     * @param initialState Initial State of the guard.
+     * @param enablewhentrue Initial State of the guard.
      * @return behavior returns the behavior with the compatible format. The syntax is the following:
      * &lt;automatic,informed,(~guard_name)&gt;
      * where:
@@ -117,12 +117,12 @@ public class SetBehaviorAction extends AbstractAction{
      * initialState: false
      * \endcode
      */
-    public String generateBehavior(boolean automatic, boolean informed, String guardValue, boolean initialState)
+    public String generateBehavior(boolean automatic, boolean informed, String guardValue, boolean enablewhentrue)
     {
     	String behavior;
     	String statusAutomatic;
     	String statusInformed;
-    	String statusInitialState;
+    	String statusEnablewhentrue;
     	if (automatic){
     		statusAutomatic = "A";
     	}
@@ -136,14 +136,14 @@ public class SetBehaviorAction extends AbstractAction{
     	else{
     		statusInformed = "N"; 
     	}
-    	if (initialState){
-    		statusInitialState = "";
+    	if (enablewhentrue){
+    		statusEnablewhentrue = "";
     	}
     	else{
-    		statusInitialState = "!"; 
+			statusEnablewhentrue = "!";
     	}
     	
-    	behavior="<"+statusAutomatic+","+statusInformed+","+"("+statusInitialState+guardValue+")"+">";
+    	behavior="<"+statusAutomatic+","+statusInformed+","+"("+statusEnablewhentrue+guardValue+")"+">";
     
     	return behavior;
     }

@@ -2,7 +2,7 @@ package org.petrinator.editor.actions;
 
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaquín Rodríguez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquï¿½n Rodrï¿½guez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -23,11 +23,12 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.miginfocom.swing.MigLayout;
+import org.petrinator.editor.commands.SetBehaviorCommand;
 import rx.Observer;
 
-import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.petrinator.editor.filechooser.FileChooserDialog;
 import org.petrinator.editor.filechooser.FileType;
@@ -98,7 +99,45 @@ public class SimulateAction extends AbstractAction {
         }
         
         createMonitor();
-    }
+
+        /*
+		String NumberOfTransitions, TimeBetweenTransition;
+
+		JTextField numberOfTransitions = new JTextField(8);
+		JTextField timeBetweenTransition = new JTextField(8);
+		JPanel myPanel = new JPanel();
+		myPanel.setLayout(new MigLayout());
+		myPanel.add(new JLabel("Number of transition:  "));
+		myPanel.add(new JLabel ("    "));
+		myPanel.add(numberOfTransitions,"wrap");
+		myPanel.add(new JLabel("Time between transition:  "));
+		myPanel.add(new JLabel ("    "));
+		myPanel.add(timeBetweenTransition,"wrap");
+
+		timeBetweenTransition.setText("3");
+		numberOfTransitions.setText("10");
+
+		int result = JOptionPane.showConfirmDialog(null, myPanel,
+				"Simulation time", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION)
+		{
+			NumberOfTransitions = numberOfTransitions.getText();
+			TimeBetweenTransition = timeBetweenTransition.getText();
+		}
+		*/
+		JOptionPane.showOptionDialog(
+				root.getParentFrame(),
+				"Invalid Number",
+				"Error",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.WARNING_MESSAGE,
+				null,
+				new String[]{"OK"},
+				"OK");
+	}
+
+
+
     
     public void createMonitor()
     {
