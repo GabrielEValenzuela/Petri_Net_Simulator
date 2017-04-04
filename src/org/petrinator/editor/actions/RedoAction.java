@@ -27,9 +27,10 @@ import org.petrinator.util.GraphicsTools;
 import org.petrinator.editor.Root;
 
 /**
- *
- * @author Martin Riesz <riesz.martin at gmail.com>
- */
+*
+* @author Martin Riesz riesz.martin at gmail.com
+* 
+*/
 public class RedoAction extends AbstractAction {
 
     private Root root;
