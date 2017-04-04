@@ -136,6 +136,10 @@ public class SimulateAction extends AbstractAction
                  return; // Don't execute further code
             }
         }
+        else
+        {
+            return; // Don't execute further code
+        }
 
         /*
          * Run threads
