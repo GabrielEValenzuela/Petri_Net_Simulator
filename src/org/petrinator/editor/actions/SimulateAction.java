@@ -112,14 +112,15 @@ public class SimulateAction extends AbstractAction
         JTextField time = new JTextField(8);
         JPanel myPanel = new JPanel();
         myPanel.setLayout(new MigLayout());
-        myPanel.add(new JLabel("Number of transition:  "));
+        myPanel.add(new JLabel("Number of transitions:  "));
         myPanel.add(new JLabel ("    "));
         myPanel.add(number,"wrap");
         myPanel.add(new JLabel("Time between transition:  "));
         myPanel.add(new JLabel ("    "));
-        myPanel.add(time,"wrap");
+        myPanel.add(time,"    ");
+        myPanel.add(new JLabel ("   ms"));
 
-        time.setText("3");
+        time.setText("1000");
         number.setText("10");
 
         int result = JOptionPane.showConfirmDialog(null, myPanel, "Simulation time", JOptionPane.OK_CANCEL_OPTION);
@@ -128,7 +129,7 @@ public class SimulateAction extends AbstractAction
             try
             {
                 numberOfTransitions = Integer.valueOf(number.getText());
-                timeBetweenTransitions = Integer.valueOf(time.getText()) * 1000;
+                timeBetweenTransitions = Integer.valueOf(time.getText());
             }
             catch(NumberFormatException e1)
             {
@@ -136,8 +137,7 @@ public class SimulateAction extends AbstractAction
                  return; // Don't execute further code
             }
         }
-        else
-        {
+        else {
             return; // Don't execute further code
         }
 
@@ -249,7 +249,7 @@ public class SimulateAction extends AbstractAction
                         {
                             try
                             {
-                                Thread.sleep(200);
+                                Thread.sleep(25);
                                 m.fireTransition(id);
                             } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
                                 e.printStackTrace();
@@ -285,6 +285,7 @@ public class SimulateAction extends AbstractAction
             transitionId = transitionId.replace("}", "");
 
             System.out.println(transitionId + " was fired!");
+            root.getEventList().addEvent((transitionId + " was fired!"));
 
             Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
             Marking marking = root.getDocument().petriNet.getInitialMarking();

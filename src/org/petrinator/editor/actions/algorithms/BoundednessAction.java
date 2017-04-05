@@ -62,9 +62,9 @@ public class BoundednessAction extends AbstractAction {
         }
 
         if (isUnboundedness) {
-            JOptionPane.showMessageDialog(root.getParentFrame(), "PetriNet is NOT bounded ", "Algorithm output", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(root.getParentFrame(), "The Petri net is NOT bounded", "Boundedness", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(root.getParentFrame(), "PetriNet is bounded", "Algorithm output", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(root.getParentFrame(), "The Petri net is bounded", "Boundedness", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
