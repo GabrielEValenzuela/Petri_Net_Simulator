@@ -112,14 +112,15 @@ public class SimulateAction extends AbstractAction
         JTextField time = new JTextField(8);
         JPanel myPanel = new JPanel();
         myPanel.setLayout(new MigLayout());
-        myPanel.add(new JLabel("Number of transition:  "));
+        myPanel.add(new JLabel("Number of transitions:  "));
         myPanel.add(new JLabel ("    "));
         myPanel.add(number,"wrap");
         myPanel.add(new JLabel("Time between transition:  "));
         myPanel.add(new JLabel ("    "));
-        myPanel.add(time,"wrap");
+        myPanel.add(time,"    ");
+        myPanel.add(new JLabel ("   ms"));
 
-        time.setText("3");
+        time.setText("1000");
         number.setText("10");
 
         int result = JOptionPane.showConfirmDialog(null, myPanel, "Simulation time", JOptionPane.OK_CANCEL_OPTION);
@@ -128,7 +129,7 @@ public class SimulateAction extends AbstractAction
             try
             {
                 numberOfTransitions = Integer.valueOf(number.getText());
-                timeBetweenTransitions = Integer.valueOf(time.getText()) * 1000;
+                timeBetweenTransitions = Integer.valueOf(time.getText());
             }
             catch(NumberFormatException e1)
             {
@@ -136,8 +137,7 @@ public class SimulateAction extends AbstractAction
                  return; // Don't execute further code
             }
         }
-        else
-        {
+        else {
             return; // Don't execute further code
         }
 
@@ -227,6 +227,14 @@ public class SimulateAction extends AbstractAction
             @Override
             public void run()
             {
+                /*
+                 * We simulate to press the EditTokens/EditTransition button so the enabled transitions
+                 * will be shown in green.
+                 */
+                new TokenSelectToolAction(root).actionPerformed(e);
+                /*
+                 * We fire the net graphically
+                 */
                 fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
             }
         });
@@ -249,7 +257,7 @@ public class SimulateAction extends AbstractAction
                         {
                             try
                             {
-                                Thread.sleep(200);
+                                Thread.sleep(25);
                                 m.fireTransition(id);
                             } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
                                 e.printStackTrace();
@@ -270,14 +278,16 @@ public class SimulateAction extends AbstractAction
      */
     void fireGraphically(List<String> list, int timeBetweenTransitions, int numberOfTransitions)
     {
+        /*
+         * If we wanna keep track of the current iteration, we need to do it with a separate variable,
+         * because the list usually has EQUAL objects (such as two equal strings that indicate that the
+         * same transition was fired twice), and the method indexOf(element) returns the index of the
+         * first occurrence in the list (and as the strings are equal, the  objects are equal), so
+         * we might get the index of the first event that fired this transition, not the current one.
+         */
+        int i = 0;
         for(String event : list)
         {
-            /*
-             * We simulate to press the EditTokens/EditTransition button so the enabled transitions
-             * will be shown in green.
-             */
-            new TokenSelectToolAction(root).actionPerformed(e);
-
             List<String> transitionInfo = Arrays.asList(event.split(","));
             String transitionId = transitionInfo.get(2);
             transitionId = transitionId.replace("\"", "");
@@ -285,6 +295,7 @@ public class SimulateAction extends AbstractAction
             transitionId = transitionId.replace("}", "");
 
             System.out.println(transitionId + " was fired!");
+            root.getEventList().addEvent((transitionId + " was fired!"));
 
             Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
             Marking marking = root.getDocument().petriNet.getInitialMarking();
@@ -294,11 +305,11 @@ public class SimulateAction extends AbstractAction
             root.refreshAll();
 
             /*
-             * Maybe, if some many threads executed many transitions concurrently,
+             * Maybe, if several threads executed multiple transitions concurrently,
              * there are more events than "numberOfTransitions" specified.
              * Let's make sure we won't fire more than "numberOfTransitions"
              */
-            if(list.indexOf(event) >= numberOfTransitions - 1)
+            if(++i >= numberOfTransitions)
                 return;
 
             try

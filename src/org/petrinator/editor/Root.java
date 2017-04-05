@@ -18,6 +18,7 @@
  */
 package org.petrinator.editor;
 
+import javax.swing.JList;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -33,6 +34,7 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import org.petrinator.auxiliar.EventList;
 import org.petrinator.editor.DrawingBoard;
 import org.petrinator.editor.LocalClipboard;
 import org.petrinator.editor.MainFrame;
@@ -63,6 +65,7 @@ import org.petrinator.util.GraphicsTools;
 import org.petrinator.util.ListEditor;
 import org.petrinator.editor.filechooser.TinaPnmlFileType;
 
+
 /**
  * This class is the main point of the application.
  *
@@ -72,6 +75,12 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
 
     private static final String APP_NAME = "Petrinator";
     private static final String APP_VERSION = "1.0.0";
+
+    /*
+     * Added event list to show which transitions were fired
+     */
+    JSplitPane splitPane;
+    EventList events = new EventList();
 
     public Root(String[] args) {
     	PNEditor.setRoot(this);
@@ -322,6 +331,13 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         canvas.repaint();
         enableOnlyPossibleActions();
         getRoleEditor().refreshSelected();
+
+        /*
+         * We update splitspane
+         */
+        splitPane.remove(events.getScrollPane());
+        splitPane.setLeftComponent(events.getScrollPane());
+        splitPane.setDividerLocation(splitPane.getDividerLocation()); // Super extremely important line
     }
 
     public void repaintCanvas() {
@@ -460,7 +476,6 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         List<FileType> simulateFileTypes = new LinkedList<FileType>();
         simulateFileTypes.add(new TinaPnmlFileType());
         
-
         Action newFile = new NewFileAction(this);
         Action openFile = new OpenFileAction(this, openSaveFiletypes);
         Action saveFile = new SaveAction(this, openSaveFiletypes);
@@ -575,20 +590,20 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         elementMenu.setMnemonic('l');
         menuBar.add(elementMenu);
 
-        JMenu rolesMenu = new JMenu("Roles");
-        rolesMenu.setMnemonic('R');
-        menuBar.add(rolesMenu);
+        //JMenu rolesMenu = new JMenu("Roles");
+        //rolesMenu.setMnemonic('R');
+        //menuBar.add(rolesMenu);
 
-        JMenu subnetMenu = new JMenu("Subnet");
-        subnetMenu.setMnemonic('S');
-        menuBar.add(subnetMenu);
+        //JMenu subnetMenu = new JMenu("Subnet");
+        //subnetMenu.setMnemonic('S');
+        // menuBar.add(subnetMenu);
 
-        //asus 2012 algorithms menu
+        // Algorithms
         JMenu algorithmsMenu = new JMenu("Algorithms");
         algorithmsMenu.setMnemonic('A');
         menuBar.add(algorithmsMenu);
 
-        // Algoritmos
+        // Algorithms
         matrixAction = new IncidenceMatrixAction(this);
         algorithmsMenu.add(new BoundednessAction(this));
         algorithmsMenu.add(matrixAction);
@@ -626,8 +641,8 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         elementMenu.add(setArcInhibitory);
         elementMenu.add(setArcReset);
 
-        rolesMenu.add(addSelectedTransitionsToSelectedRoles);
-        rolesMenu.add(removeSelectedTransitionsFromSelectedRoles);
+        // rolesMenu.add(addSelectedTransitionsToSelectedRoles);
+        // rolesMenu.add(removeSelectedTransitionsFromSelectedRoles);
 
         drawMenu.add(selectTool_SelectionAction);
         drawMenu.addSeparator();
@@ -636,11 +651,11 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         drawMenu.add(selectTool_ArcAction);
         drawMenu.add(selectTool_TokenAction);
 
-        subnetMenu.add(openSubnet);
-        subnetMenu.add(closeSubnet);
-        subnetMenu.add(replaceSubnet);
-        subnetMenu.add(saveSubnetAs);
-        subnetMenu.add(convertTransitionToSubnet);
+        // subnetMenu.add(openSubnet);
+        // subnetMenu.add(closeSubnet);
+        // subnetMenu.add(replaceSubnet);
+        // subnetMenu.add(saveSubnetAs);
+        // subnetMenu.add(convertTransitionToSubnet);
 
         placePopup = new JPopupMenu();
         placePopup.add(setLabel);
@@ -689,12 +704,12 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
 
         arcEdgePopup.add(delete);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         splitPane.setDividerSize(6);
         splitPane.setOneTouchExpandable(true);
-        splitPane.setLeftComponent(getRoleEditor());
+        splitPane.setLeftComponent(events.getScrollPane());
         splitPane.setRightComponent(drawingBoard);
-        splitPane.setDividerLocation(120);
+        splitPane.setDividerLocation(150);
 
         mainFrame.add(splitPane, BorderLayout.CENTER);
         mainFrame.add(toolBar, BorderLayout.NORTH);
@@ -728,6 +743,11 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
     public void setModified(boolean isModified) {
         this.isModified = isModified;
         mainFrame.setTitle(getNewWindowTitle());
+    }
+
+    public EventList getEventList()
+    {
+        return events;
     }
 
     private String getNewWindowTitle() {
