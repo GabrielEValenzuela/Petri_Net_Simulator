@@ -2,7 +2,7 @@ package org.petrinator.editor.actions;
 
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaqu�n Rodr�guez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquin Rodriguez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@ package org.petrinator.editor.actions;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.sun.deploy.ui.ProgressDialog;
 import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.FileChooserDialog;
 import org.petrinator.editor.filechooser.FileType;
@@ -27,6 +28,8 @@ import org.petrinator.monitor.ConcreteObserver;
 import org.petrinator.petrinet.*;
 import org.petrinator.util.GraphicsTools;
 import org.petrinator.editor.commands.FireTransitionCommand;
+import org.petrinator.auxiliar.*;
+import java.awt.*;
 import java.util.Arrays;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
@@ -45,6 +48,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Joaquin Felici <joaquinfelici at gmail.com>
@@ -59,6 +63,7 @@ public class SimulateAction extends AbstractAction
 {
 	private Root root;
     private List<FileType> fileTypes;
+    protected static boolean stop = false;
     ActionEvent e;
 
     public SimulateAction(Root root, List<FileType> fileTypes) {
@@ -72,7 +77,7 @@ public class SimulateAction extends AbstractAction
 
     public void actionPerformed(ActionEvent e) 
     {
-        this.e = e;
+        stop = false;
 
         /*
          * Create tmp.pnml file
@@ -142,9 +147,19 @@ public class SimulateAction extends AbstractAction
         }
 
         /*
-         * Run threads
+         * Run a single thread to fire the transitions graphically
          */
-        runInMonitor(numberOfTransitions, timeBetweenTransitions);
+        final int a = numberOfTransitions; final int b= timeBetweenTransitions;
+        Thread t = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                runInMonitor(a, b);
+            }
+        });
+        t.start();
+
     }
 
     /*
@@ -185,31 +200,47 @@ public class SimulateAction extends AbstractAction
 			t.start();
 		 }
 
-        // JOptionPane.showMessageDialog(null, "I am happy.");
+
+         ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
+         dialog.show(true);
 
 		 /*
 		  * Wait for the number of events to occur
 		  */
 		 while(true)
          {
+             System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
+
+             for(int i= 0; i<petri.getEnabledTransitions().length; i++)
+                 System.out.print(petri.getEnabledTransitions()[i]);
+
+             System.out.println("");
+
              if(((ConcreteObserver) observer).getEvents().size() >= numberOfTransitions)  // If there have been N events already
                  break;
              else
              {
                  try
                  {
-                     Thread.currentThread().sleep(100);
+                     Thread.currentThread().sleep(10);
                  } catch (InterruptedException e1) {
                      e1.printStackTrace();
                  }
-                 //System.out.println(""); // Need at least one instruction in while, otherwise it will explode
+                 // System.out.println(""); // Need at least one instruction in while, otherwise it will explode
                  if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
                  {
                      JOptionPane.showMessageDialog(null, "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
                      break;
                  }
+                 else if(blockedMonitor(threads))
+                 {
+                     System.out.println("Monitor blocked");
+                     break;
+                 }
              }
          }
+
+        dialog.show(false);
 
          /*
           * Stop all threads from firing
@@ -220,25 +251,14 @@ public class SimulateAction extends AbstractAction
          }
 
         /*
-         * Run a single thread to fire the transitions graphically
+         * We simulate to press the EditTokens/EditTransition button so the enabled transitions
+         * will be shown in green.
          */
-        Thread t = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                /*
-                 * We simulate to press the EditTokens/EditTransition button so the enabled transitions
-                 * will be shown in green.
-                 */
-                new TokenSelectToolAction(root).actionPerformed(e);
-                /*
-                 * We fire the net graphically
-                 */
-                fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
-            }
-        });
-        t.start();
+        new TokenSelectToolAction(root).actionPerformed(e);
+        /*
+         * We fire the net graphically
+         */
+        fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
     }
 
     /*
@@ -257,7 +277,7 @@ public class SimulateAction extends AbstractAction
                         {
                             try
                             {
-                                Thread.sleep(25);
+                                Thread.sleep((new Random()).nextInt(50));
                                 m.fireTransition(id);
                             } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
                                 e.printStackTrace();
@@ -288,6 +308,16 @@ public class SimulateAction extends AbstractAction
         int i = 0;
         for(String event : list)
         {
+            /*
+             * Check if stop button has been pressed
+             */
+            if(stop)
+            {
+                stop = false;
+                list.clear();
+                return;
+            }
+
             List<String> transitionInfo = Arrays.asList(event.split(","));
             String transitionId = transitionInfo.get(2);
             transitionId = transitionId.replace("\"", "");
@@ -332,6 +362,16 @@ public class SimulateAction extends AbstractAction
         for(int i = 0; i < array.length; i++)
         {
             if(array[i] != value)
+                return false;
+        }
+        return true;
+    }
+
+    static boolean blockedMonitor(List<Thread> threads)
+    {
+        for(Thread t: threads)
+        {
+            if(t.getState() != Thread.State.WAITING)
                 return false;
         }
         return true;
