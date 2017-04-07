@@ -559,11 +559,12 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         toolBar.add(transition);
         toolBar.add(arc);
         toolBar.add(token);
-        toolBar.add(simulateNet);
-        toolBar.add(new StopSimulationAction(this));
         toolBar.addSeparator();
         toolBar.add(addSelectedTransitionsToSelectedRoles);
         toolBar.add(removeSelectedTransitionsFromSelectedRoles);
+        toolBar.addSeparator();
+        toolBar.add(simulateNet);
+        toolBar.add(new StopSimulationAction(this));
 
         /*
          * Top toolbar (File, Edit, Draw, etc...)

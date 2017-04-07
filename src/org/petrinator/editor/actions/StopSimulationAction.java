@@ -38,7 +38,7 @@ public class StopSimulationAction extends AbstractAction
         this.root = root;
         String name = "Stop";
         putValue(NAME, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/synthesize.gif"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/stop16.png"));
         putValue(SHORT_DESCRIPTION, name);
     }
 

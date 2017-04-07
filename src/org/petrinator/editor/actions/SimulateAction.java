@@ -19,7 +19,6 @@ package org.petrinator.editor.actions;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.sun.deploy.ui.ProgressDialog;
 import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.FileChooserDialog;
 import org.petrinator.editor.filechooser.FileType;
@@ -69,9 +68,9 @@ public class SimulateAction extends AbstractAction
     public SimulateAction(Root root, List<FileType> fileTypes) {
         this.root = root;
         this.fileTypes = fileTypes;
-        String name = "Simulation";
+        String name = "Simulate";
         putValue(NAME, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.gif"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
         putValue(SHORT_DESCRIPTION, name);
     }
 
@@ -146,6 +145,8 @@ public class SimulateAction extends AbstractAction
             return; // Don't execute further code
         }
 
+        setEnabled(false);
+
         /*
          * Run a single thread to fire the transitions graphically
          */
@@ -195,11 +196,10 @@ public class SimulateAction extends AbstractAction
 		 List<Thread> threads = new ArrayList<Thread>();
 		 for(int i = 0; i < petri.getTransitions().length; i++)
 		 {
-			Thread t = createThread(monitor, petri.getTransitions()[i].getId());
+			Thread t = createThread(monitor, petri.getTransitions()[i].getName());
 			threads.add(t);
 			t.start();
 		 }
-
 
          ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
          dialog.show(true);
@@ -259,6 +259,8 @@ public class SimulateAction extends AbstractAction
          * We fire the net graphically
          */
         fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
+
+        setEnabled(true);
     }
 
     /*
@@ -314,6 +316,7 @@ public class SimulateAction extends AbstractAction
             if(stop)
             {
                 stop = false;
+                setEnabled(true);
                 list.clear();
                 return;
             }
@@ -324,11 +327,11 @@ public class SimulateAction extends AbstractAction
             transitionId = transitionId.replace("id:", "");
             transitionId = transitionId.replace("}", "");
 
-            System.out.println(transitionId + " was fired!");
-            root.getEventList().addEvent((transitionId + " was fired!"));
-
             Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
             Marking marking = root.getDocument().petriNet.getInitialMarking();
+
+            System.out.println(transition.getLabel() + " was fired!");
+            root.getEventList().addEvent((transition.getLabel() + " was fired!"));
 
             FireTransitionCommand fire = new FireTransitionCommand(transition, marking);
             fire.execute();
@@ -340,7 +343,10 @@ public class SimulateAction extends AbstractAction
              * Let's make sure we won't fire more than "numberOfTransitions"
              */
             if(++i >= numberOfTransitions)
+            {
+                setEnabled(true);
                 return;
+            }
 
             try
             {

@@ -21,7 +21,7 @@ public class ProgressBarDialog
         JProgressBar bar = new JProgressBar();
         bar.setIndeterminate(true);
         bar.setStringPainted(true);
-        bar.setPreferredSize(new Dimension(200, 20));
+        bar.setPreferredSize(new Dimension(200, 25));
         bar.setBorderPainted(true);
         bar.setString(message);
 
