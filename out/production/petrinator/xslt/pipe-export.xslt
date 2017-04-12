@@ -63,9 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
                 <graphics>
                     <offset x="5" y="33"/>
-                    <fill color="rgb(255, 255, 255)"/>
-                    <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                    <font family="SansSerif" orientation="0" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -76,9 +73,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
                     <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                 </position>
-                <dimension x="32" y="32"/>
-                <fill color="rgb(255, 255, 255)"/>
-                <line color="rgb(0, 0, 0)" shape="curve" style="solid" width="1"/>
             </graphics>
         </place>
     </xsl:for-each>
@@ -91,9 +85,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
                 <graphics>
                     <offset x="4" y="31"/>
-                    <fill color="rgb(255, 255, 255)"/>
-                    <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                    <font family="SansSerif" orientation="0" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
                 </graphics>
             </name>
             <graphics>
@@ -101,9 +92,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
                     <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                 </position>
-                <dimension x="32" y="32"/>
-                <fill color="rgb(255, 255, 255)"/>
-                <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
             </graphics>
         </transition>
     </xsl:for-each>

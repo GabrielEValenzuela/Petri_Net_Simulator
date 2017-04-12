@@ -41,8 +41,7 @@ import org.petrinator.editor.MainFrame;
 import org.petrinator.editor.PNEditor;
 import org.petrinator.editor.UndoManager;
 import org.petrinator.editor.actions.*;
-import org.petrinator.editor.actions.algorithms.BoundednessAction;
-import org.petrinator.editor.actions.algorithms.IncidenceMatrixAction;
+import org.petrinator.editor.actions.algorithms.*;
 import org.petrinator.editor.canvas.*;
 import org.petrinator.editor.filechooser.EpsFileType;
 import org.petrinator.editor.filechooser.FileType;
@@ -601,11 +600,19 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         // menuBar.add(subnetMenu);
 
         // Algorithms
-        JMenu algorithmsMenu = new JMenu("Algorithms");
+        JMenu algorithmsMenu = new JMenu("Analysis");
         algorithmsMenu.setMnemonic('A');
         menuBar.add(algorithmsMenu);
 
-        // Algorithms
+        algorithmsMenu.add(new ClassificationAction(this));
+        algorithmsMenu.add(new GSPNAction(this));
+        algorithmsMenu.add(new InvariantAction(this));
+        algorithmsMenu.add(new MatricesAction(this));
+        algorithmsMenu.add(new ReachabilityAction(this));
+        algorithmsMenu.add(new ResponseTimeAction(this));
+        algorithmsMenu.add(new SafetyAction(this));
+        algorithmsMenu.add(new SiphonsAction(this));
+
         matrixAction = new IncidenceMatrixAction(this);
         algorithmsMenu.add(new BoundednessAction(this));
         algorithmsMenu.add(matrixAction);

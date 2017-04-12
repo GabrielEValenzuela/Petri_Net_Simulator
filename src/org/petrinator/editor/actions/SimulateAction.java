@@ -96,7 +96,7 @@ public class SimulateAction extends AbstractAction
         chooser.setCurrentDirectory(root.getCurrentDirectory());
         chooser.setDialogTitle("Save as...");
 
-        File file = new File("temp/" + "temp" + "." + "pnml");
+        File file = new File("tmp/" + "tmp" + "." + "pnml");
         FileType chosenFileType = (FileType) chooser.getFileFilter();
         try 
         {
@@ -173,7 +173,7 @@ public class SimulateAction extends AbstractAction
         /*
          * Create monitor, petri net, and all related variables.
          */
-    	 PetriNetFactory factory = new PetriNetFactory("temp/temp.pnml");
+    	 PetriNetFactory factory = new PetriNetFactory("tmp/tmp.pnml");
 		 RootPetriNet petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
 		 TransitionsPolicy policy = new FirstInLinePolicy();
 		 PetriMonitor monitor = new PetriMonitor(petri, policy);
