@@ -103,6 +103,20 @@ public class Subnet extends TransitionNode {
         }
     }
 
+
+    public boolean labelExists(String label)
+    {
+        for (Element element : elements)
+        {
+            if ((element instanceof Place) || (element instanceof Transition)) {
+                if (((Node) element).getLabel().equals(label)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public Element getElementByXY(int x, int y) {
         for (int i = elements.size() - 1; i >= 0; i--) { // Check elements from front to back.
             Element element = (Element) elements.get(i);
@@ -134,7 +148,6 @@ public class Subnet extends TransitionNode {
         /*
          * Agregado para imprimir la red:
          */
-        
         LinkedList<Element> lista = (LinkedList<Element>) this.getElementsCopy();
         System.out.print("[  ");
         for(int i=0; i<lista.size(); i++)
@@ -320,6 +333,7 @@ public class Subnet extends TransitionNode {
         }
         return transitions;
     }
+
 
     public Set<Subnet> getSubnetsRecursively() {
         Set<Subnet> subnets = new HashSet<Subnet>();

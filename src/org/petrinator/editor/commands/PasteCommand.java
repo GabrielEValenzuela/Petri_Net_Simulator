@@ -24,8 +24,28 @@ public class PasteCommand implements Command {
         petriNet.getNodeLabelGenerator().setLabelsToPastedContent(elements);
 
         Point translation = calculateTranslatioToCenter(elements, currentSubnet);
-        for (Element element : elements) {
+        for (Element element : elements)
+        {
             element.moveBy(translation.x, translation.y);
+
+            /*
+             * Let's change the labels of the nodes we just copied, for example transition becomes transition (1)
+             */
+            if((element instanceof Place) || (element instanceof Transition))
+            {
+                //String label = ((Node) element).getLabel();
+                while(subnet.labelExists(((Node) element).getLabel()))  // If the label/name exists in the net
+                {
+                    String label = ((Node) element).getLabel();
+                    try { // It's already been copied and we have to increment the number
+                        int copy = Integer.parseInt(label.substring(label.indexOf("(")+1, label.indexOf(")")));
+                        ((Node) element).setLabel(((Node) element).getLabel().substring(0, ((Node) element).getLabel().indexOf("(")) + "(" + (copy + 1) +")");
+                    } catch (StringIndexOutOfBoundsException e) // It's never been copied so it doesn't have parentheses, we just add (1)
+                    {
+                        ((Node) element).setLabel(((Node) element).getLabel() + " (1)");
+                    }
+                }
+            }
         }
     }
 

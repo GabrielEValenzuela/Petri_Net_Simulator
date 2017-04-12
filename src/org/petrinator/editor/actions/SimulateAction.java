@@ -30,6 +30,8 @@ import org.petrinator.editor.commands.FireTransitionCommand;
 import org.petrinator.auxiliar.*;
 import java.awt.*;
 import java.util.Arrays;
+
+import org.unc.lac.javapetriconcurrencymonitor.errors.DuplicatedNameError;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
@@ -174,7 +176,15 @@ public class SimulateAction extends AbstractAction
          * Create monitor, petri net, and all related variables.
          */
     	 PetriNetFactory factory = new PetriNetFactory("tmp/tmp.pnml");
-		 RootPetriNet petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
+         RootPetriNet petri;
+		 try {  // The exception tell us if there's two places or transitions with the same name
+		     petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
+		 } catch (DuplicatedNameError e){
+             JOptionPane.showMessageDialog(null, "Two places or transitions cannot have the same label");
+             stop = false;
+             setEnabled(true);
+             return; // Don't execute further code
+         }
 		 TransitionsPolicy policy = new FirstInLinePolicy();
 		 PetriMonitor monitor = new PetriMonitor(petri, policy);
 		 
@@ -209,7 +219,7 @@ public class SimulateAction extends AbstractAction
 		  */
 		 while(true)
          {
-             System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
+             //System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
 
              for(int i= 0; i<petri.getEnabledTransitions().length; i++)
                  System.out.print(petri.getEnabledTransitions()[i]);

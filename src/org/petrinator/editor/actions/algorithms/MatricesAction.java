@@ -3,6 +3,7 @@ package org.petrinator.editor.actions.algorithms;
 import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.*;
 
+import org.petrinator.util.GraphicsTools;
 import pipe.gui.ApplicationSettings;
 import pipe.gui.widgets.ButtonBar;
 import pipe.gui.widgets.EscapableDialog;
@@ -37,6 +38,7 @@ public class MatricesAction extends AbstractAction
         String name = "Matrices";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
     }
 
     public void actionPerformed(ActionEvent e)

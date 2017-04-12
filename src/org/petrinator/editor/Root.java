@@ -391,7 +391,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         undo.setEnabled(getUndoManager().isUndoable());
         redo.setEnabled(getUndoManager().isRedoable());
         setPlaceStatic.setEnabled(isPlaceNode);
-        matrixAction.setEnabled(isEmpty);
+        //matrixAction.setEnabled(isEmpty);
         
     }
 
@@ -613,9 +613,9 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         algorithmsMenu.add(new SafetyAction(this));
         algorithmsMenu.add(new SiphonsAction(this));
 
-        matrixAction = new IncidenceMatrixAction(this);
-        algorithmsMenu.add(new BoundednessAction(this));
-        algorithmsMenu.add(matrixAction);
+        //matrixAction = new IncidenceMatrixAction(this);
+        //algorithmsMenu.add(new BoundednessAction(this));
+        //algorithmsMenu.add(matrixAction);
 
         JMenu helpMenu = new JMenu("Help");
         helpMenu.add(new AboutAction(this));

@@ -5,6 +5,7 @@ import org.petrinator.editor.filechooser.FileChooserDialog;
 import org.petrinator.editor.filechooser.FileType;
 import org.petrinator.editor.filechooser.FileTypeException;
 import org.petrinator.editor.filechooser.ViptoolPnmlFileType;
+import org.petrinator.util.GraphicsTools;
 import pipe.gui.ApplicationSettings;
 import pipe.gui.widgets.ButtonBar;
 import pipe.gui.widgets.EscapableDialog;
@@ -43,6 +44,7 @@ public class InvariantAction extends AbstractAction
         String name = "Invariant analysis";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
     }
 
     public void actionPerformed(ActionEvent e)
