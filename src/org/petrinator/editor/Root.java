@@ -49,6 +49,8 @@ import org.petrinator.editor.filechooser.FileTypeException;
 import org.petrinator.editor.filechooser.PflowFileType;
 import org.petrinator.editor.filechooser.PngFileType;
 import org.petrinator.editor.filechooser.ViptoolPnmlFileType;
+import org.petrinator.editor.filechooser.TinaPnmlFileType;
+import org.petrinator.editor.filechooser.PipePnmlFileType;
 import org.petrinator.petrinet.Arc;
 import org.petrinator.petrinet.Document;
 import org.petrinator.petrinet.Element;
@@ -62,7 +64,7 @@ import org.petrinator.petrinet.TransitionNode;
 import org.petrinator.util.CollectionTools;
 import org.petrinator.util.GraphicsTools;
 import org.petrinator.util.ListEditor;
-import org.petrinator.editor.filechooser.TinaPnmlFileType;
+
 
 
 /**
@@ -468,6 +470,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         List<FileType> importFiletypes = new LinkedList<FileType>();
         importFiletypes.add(new ViptoolPnmlFileType());
         List<FileType> exportFiletypes = new LinkedList<FileType>();
+        exportFiletypes.add(new PipePnmlFileType());
         exportFiletypes.add(new TinaPnmlFileType());
         exportFiletypes.add(new ViptoolPnmlFileType());
         exportFiletypes.add(new EpsFileType());
