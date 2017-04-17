@@ -148,6 +148,7 @@ public class Subnet extends TransitionNode {
         /*
          * Agregado para imprimir la red:
          */
+        /*
         LinkedList<Element> lista = (LinkedList<Element>) this.getElementsCopy();
         System.out.print("[  ");
         for(int i=0; i<lista.size(); i++)
@@ -156,7 +157,7 @@ public class Subnet extends TransitionNode {
         	else if(lista.get(i) instanceof Edge)
         		System.out.print("A(" +((ArcEdge) lista.get(i)).getSource().getId() + "->" +((ArcEdge) lista.get(i)).getDestination().getId() + ")    ");
         System.out.println("]");
-        
+        */
     }
 
     public void removeElement(Element element) {

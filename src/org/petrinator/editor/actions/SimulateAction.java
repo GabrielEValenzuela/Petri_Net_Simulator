@@ -211,6 +211,8 @@ public class SimulateAction extends AbstractAction
 			t.start();
 		 }
 
+		 System.out.println("Started firing");
+
          ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
          dialog.show(true);
 
@@ -221,10 +223,8 @@ public class SimulateAction extends AbstractAction
          {
              //System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
 
-             for(int i= 0; i<petri.getEnabledTransitions().length; i++)
-                 System.out.print(petri.getEnabledTransitions()[i]);
-
-             System.out.println("");
+             //for(int i= 0; i<petri.getEnabledTransitions().length; i++)
+             //    System.out.print(petri.getEnabledTransitions()[i]);
 
              if(((ConcreteObserver) observer).getEvents().size() >= numberOfTransitions)  // If there have been N events already
                  break;
@@ -250,6 +250,7 @@ public class SimulateAction extends AbstractAction
              }
          }
 
+        System.out.println("Started simulation");
         dialog.show(false);
 
          /*
@@ -269,7 +270,7 @@ public class SimulateAction extends AbstractAction
          * We fire the net graphically
          */
         fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
-
+        System.out.println("Simulation ended");
         setEnabled(true);
     }
 
@@ -328,6 +329,7 @@ public class SimulateAction extends AbstractAction
                 stop = false;
                 setEnabled(true);
                 list.clear();
+                System.out.println("Simulation stopped");
                 return;
             }
 
@@ -340,7 +342,7 @@ public class SimulateAction extends AbstractAction
             Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
             Marking marking = root.getDocument().petriNet.getInitialMarking();
 
-            System.out.println(transition.getLabel() + " was fired!");
+            //System.out.println(transition.getLabel() + " was fired!");
             root.getEventList().addEvent((transition.getLabel() + " was fired!"));
 
             FireTransitionCommand fire = new FireTransitionCommand(transition, marking);
