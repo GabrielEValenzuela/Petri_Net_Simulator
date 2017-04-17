@@ -6,6 +6,7 @@ import org.petrinator.editor.filechooser.FileType;
 import org.petrinator.editor.filechooser.FileTypeException;
 import org.petrinator.editor.filechooser.ViptoolPnmlFileType;
 import org.petrinator.util.GraphicsTools;
+import pipe.calculations.myTree;
 import pipe.exceptions.EmptyNetException;
 import pipe.gui.ApplicationSettings;
 import pipe.gui.widgets.ButtonBar;
@@ -13,6 +14,7 @@ import pipe.gui.widgets.EscapableDialog;
 import pipe.gui.widgets.PetriNetChooserPanel;
 import pipe.gui.widgets.ResultsHTMLPane;
 import pipe.utilities.writers.PNMLWriter;
+import pipe.views.MarkingView;
 import pipe.views.PetriNetView;
 
 import javax.swing.*;
@@ -22,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @author Joaquin Felici <joaquinfelici at gmail.com>
@@ -100,7 +103,6 @@ public class ClassificationAction extends AbstractAction
                 return;
             }
 
-            //String s = "<h2>Petri net classification results</h2>";
             String s = "";
 
             if(!sourceDataLayer.hasPlaceTransitionObjects())
@@ -111,14 +113,72 @@ public class ClassificationAction extends AbstractAction
             {
                 try
                 {
-                    s += ResultsHTMLPane.makeTable(new String[]{"   Property   ", "",
+                    /*
+                     * Information for bounded/safe/deadlock
+                     */
+                    //Get the new marking
+                    LinkedList<MarkingView>[] markings = sourceDataLayer.getCurrentMarkingVector();
+                    int[] markup = new int[markings.length];
+                    for(int k = 0; k < markings.length; k++)
+                    {
+                        markup[k] = markings[k].getFirst().getCurrentMarking();
+                    }
+                    myTree tree = new myTree(sourceDataLayer, markup);
+                    boolean bounded = !tree.foundAnOmega;
+                    boolean safe = !tree.moreThanOneToken;
+                    boolean deadlock = tree.noEnabledTransitions;
+
+                    /*
+                     * Standard classification
+                     */
+                    s += ResultsHTMLPane.makeTable(new String[]{"&nbsp&emsp Types of Petri net &emsp&nbsp", "&emsp&emsp&emsp",
                             "State Machine", "" + stateMachine(sourceDataLayer),
                             "Marked Graph", "" + markedGraph(sourceDataLayer),
                             "Free Choice Net", "" + freeChoiceNet(sourceDataLayer),
-                            "Extended Free Choice Net", "" + extendedFreeChoiceNet(sourceDataLayer),
+                            "Extended FCN", "" + extendedFreeChoiceNet(sourceDataLayer),
                             "Simple Net", "" + simpleNet(sourceDataLayer),
-                            "Extended Simple Net", "" + extendedSimpleNet(sourceDataLayer)
+                            "Extended SN", "" + extendedSimpleNet(sourceDataLayer)
                     }, 2, false, true, false, true);
+
+                    /*
+                     * Bounded/safe/deadlock
+                     */
+                    if(tree.tooBig)
+                    {
+                        s += "<div class=warning> State space tree expansion aborted " +
+                                "because it grew too large. Results will be " +
+                                "incomplete.</div>";
+                    }
+
+                    s += ResultsHTMLPane.makeTable(
+                            new String[]{"Mathematical properties","&emsp&emsp&emsp",
+                                    "Bounded", "" + bounded,
+                                    "Safe", "" + safe,
+                                    "Deadlock", "" + deadlock},
+                            2, false, true, false, true);
+
+                    if(deadlock)
+                    {
+                        s += "<b>Shortest path to deadlock:</b> ";
+                        if(tree.pathToDeadlock.length == 0)
+                        {
+                            s += "Initial state is deadlocked";
+                        }
+                        else
+                        {
+                            for(int i = 0; i < tree.pathToDeadlock.length; i++)
+                            {
+                                int j = tree.pathToDeadlock[i];
+                                if(sourceDataLayer.getTransition(j) != null &&
+                                        sourceDataLayer.getTransition(j).getName() != null)
+                                {
+                                    s += sourceDataLayer.getTransition(j).getName() + " ";
+                                }
+                            }
+                        }
+                    }
+
+
                     results.setEnabled(true);
                 }
                 catch(OutOfMemoryError oome)
