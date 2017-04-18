@@ -103,9 +103,9 @@ public class MatricesAction extends AbstractAction
             {
                 return;
             }
-            if(!data.hasPlaceTransitionObjects())
+            if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
             {
-                s += "No Petri net objects defined!";
+                s += "Invalid net!";
             }
             else
             {

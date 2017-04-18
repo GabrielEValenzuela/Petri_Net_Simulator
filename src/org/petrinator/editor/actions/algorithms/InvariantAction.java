@@ -104,9 +104,9 @@ public class InvariantAction extends AbstractAction
                 return;
             }
 
-            if(!sourceDataLayer.hasPlaceTransitionObjects())
+            if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
             {
-                s += "No Petri net objects defined!";
+                s += "Invalid net!";
             }
             else
             {

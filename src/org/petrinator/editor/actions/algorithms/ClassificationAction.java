@@ -105,9 +105,9 @@ public class ClassificationAction extends AbstractAction
 
             String s = "";
 
-            if(!sourceDataLayer.hasPlaceTransitionObjects())
+            if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
             {
-                s += "No Petri net objects defined!";
+                s += "Invalid net!";
             }
             else
             {
