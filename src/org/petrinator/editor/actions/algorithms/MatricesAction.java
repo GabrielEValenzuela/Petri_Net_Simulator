@@ -53,7 +53,7 @@ public class MatricesAction extends AbstractAction
             chooser.setSelectedFile(root.getCurrentFile());
         }
 
-        chooser.addChoosableFileFilter(new ViptoolPnmlFileType());
+        chooser.addChoosableFileFilter(new PipePnmlFileType());
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setCurrentDirectory(root.getCurrentDirectory());
         chooser.setDialogTitle("Save as...");

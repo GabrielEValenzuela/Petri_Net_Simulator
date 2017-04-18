@@ -4,7 +4,8 @@ import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.FileChooserDialog;
 import org.petrinator.editor.filechooser.FileType;
 import org.petrinator.editor.filechooser.FileTypeException;
-import org.petrinator.editor.filechooser.ViptoolPnmlFileType;
+import org.petrinator.editor.filechooser.PipePnmlFileType;
+
 import org.petrinator.util.GraphicsTools;
 import pipe.calculations.myTree;
 import pipe.exceptions.EmptyNetException;
@@ -58,7 +59,7 @@ public class ClassificationAction extends AbstractAction
             chooser.setSelectedFile(root.getCurrentFile());
         }
 
-        chooser.addChoosableFileFilter(new ViptoolPnmlFileType());
+        chooser.addChoosableFileFilter(new PipePnmlFileType());
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setCurrentDirectory(root.getCurrentDirectory());
         chooser.setDialogTitle("Save as...");
