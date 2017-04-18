@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="/document">
 <pnml>
-    <net type="VIPschema.xsd">
+    <net type="Petrinator VIPToolDialect">
         <xsl:call-template name="subnet">
             <!-- use this to translate all elements to positive coordinates: -->
             <xsl:with-param name="x"><xsl:value-of select="-left"/></xsl:with-param>

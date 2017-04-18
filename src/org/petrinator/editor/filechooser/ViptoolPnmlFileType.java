@@ -56,7 +56,7 @@ public class ViptoolPnmlFileType extends FileType {
     @Override
     public void save(Document document, File file) throws FileTypeException {
         try {
-            final InputStream xslt = getClass().getResourceAsStream("/xslt/pipe-export.xslt");
+            final InputStream xslt = getClass().getResourceAsStream("/xslt/pnml-export.xslt");
             PetriNet petriNet = document.petriNet;
             Marking initialMarking = petriNet.getInitialMarking();
             new DocumentExporter(document, initialMarking).writeToFileWithXslt(file, xslt);

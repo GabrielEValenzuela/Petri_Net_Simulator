@@ -5,7 +5,7 @@
 
 <xsl:template match="/document">
 <pnml>
-    <net id="n-2238-D385B-0" type="TinaDialect">
+    <net id="n-2238-D385B-0" type="Petrinator TinaDialect">
         <page id='g-2A34-1546E-1'>
         	<xsl:call-template name="subnet"><!-- use this to translate all elements to positive coordinates: --><xsl:with-param
         			name="x">
