@@ -19,17 +19,118 @@ package org.petrinator.petrinet;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- *
- * @author Martin Riesz <riesz.martin at gmail.com>
- */
-public abstract class TransitionNode extends Node implements Cloneable {
+public abstract class TransitionNode extends Node implements Cloneable
+{
+    //initial state
+    private String behavior = "<F,I,(!none)>";
+    private boolean automatic = false;
+    private boolean informed = true;
+    private String guard = "none";
+    private boolean enablewhentrue = false;
 
-    public Set<PlaceNode> getConnectedPlaceNodes() {
+    public Set<PlaceNode> getConnectedPlaceNodes()
+    {
         Set<PlaceNode> connectedPlaceNodes = new HashSet<PlaceNode>();
         for (ArcEdge arc : getConnectedArcEdges()) {
             connectedPlaceNodes.add(arc.getPlaceNode());
         }
         return connectedPlaceNodes;
     }
+
+    /**
+     * Returns the behavior.
+     *
+     * @return the behavior.
+     */
+    public String getBehavior()
+    {
+        return behavior;
+    }
+
+    /**
+     * Sets a new behavior.
+     *
+     * @param behavior - behavior to set.
+     */
+    public void setBehavior( String behavior)
+    {
+        this.behavior = behavior;
+    }
+
+    /**
+     * If the transition is automatic return true, else return false.
+     * @return automatic.
+     */
+    public boolean isAutomatic()
+    {
+        return automatic;
+    }
+
+    /**
+     * If the transition is informed return true, else return false.
+     * @return informed.
+     */
+    public boolean isInformed()
+    {
+        return informed;
+    }
+
+    /**
+     * If the transition is enable when true return true, else return false.
+     * @return Enablewhentrue.
+     */
+    public boolean isEnablewhentrue()
+    {
+        return enablewhentrue;
+    }
+
+    /**
+     * Return the name of the guard
+     * @return guard.
+     */
+    public String getGuard()
+    {
+        return guard;
+    }
+
+    /**
+     * Sets a new state.
+     *
+     * @param automatic - state to set.
+     */
+    public void setAutomatic(boolean automatic)
+    {
+        this.automatic = automatic;
+    }
+
+    /**
+     * Sets a new state.
+     *
+     * @param informed - state to set.
+     */
+    public void setInformed(boolean informed)
+    {
+        this.informed = informed;
+    }
+
+    /**
+     * Sets a new name of guard.
+     *
+     * @param guard - state to set.
+     */
+    public void setGuard(String guard)
+    {
+        this.guard = guard;
+    }
+
+    /**
+     * Sets a new state.
+     *
+     * @param enablewhentrue - state to set.
+     */
+    public void setEnableWhenTrue(boolean enablewhentrue)
+    {
+        this.enablewhentrue = enablewhentrue;
+    }
+
 }

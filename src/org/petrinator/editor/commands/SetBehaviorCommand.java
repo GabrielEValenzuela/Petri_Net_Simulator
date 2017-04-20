@@ -1,6 +1,6 @@
 package org.petrinator.editor.commands;
 
-import org.petrinator.petrinet.Node;
+import org.petrinator.petrinet.TransitionNode;
 import org.petrinator.util.Command;
 
 /**
@@ -9,33 +9,50 @@ import org.petrinator.util.Command;
  * @author Leandro Asson leoasson at gmail.com
  */
 
-public class SetBehaviorCommand implements Command{
-
-	
-	   private Node node;
+public class SetBehaviorCommand implements Command
+{
+	   private TransitionNode transition;
 	   private String newBehavior;
-	   private String oldBehavior;
+	   //private String oldBehavior;
+	   private boolean automatic;
+	   private boolean informed;
+	   private String guard;
+	   private boolean Enablewhentrue;
 
-	    public SetBehaviorCommand(Node node, String newBehavior) {
-	        this.node = node;
+
+	    public SetBehaviorCommand(TransitionNode transition, String newBehavior, boolean automatic, boolean informed, String guard, boolean enable)
+		{
+	        this.transition = transition;
 	        this.newBehavior = newBehavior;
+	        this.automatic = automatic;
+	        this.informed = informed;
+	        this.guard = guard;
+	        Enablewhentrue = enable;
 	    }
 
-	    public void execute() {
-	        this.oldBehavior = node.getBehavior();
-	        node.setBehavior(newBehavior);
+	    public void execute()
+		{
+	    	//this.oldBehavior = transition.getBehavior();
+	    	transition.setBehavior(newBehavior);
+	    	transition.setAutomatic(automatic);
+	    	transition.setInformed(informed);
+			transition.setGuard(guard);
+			transition.setEnableWhenTrue(Enablewhentrue);
 	    }
 
-	    public void undo() {
-	        node.setBehavior(oldBehavior);
+	    public void undo()
+		{
+			//transition.setBehavior(oldBehavior);
 	    }
 
-	    public void redo() {
-	        execute();
+	    public void redo()
+		{
+	    	//execute();
 	    }
 
 	    @Override
-	    public String toString() {
+	    public String toString()
+		{
 	        return "Set Behavior to " + newBehavior;
 	    }
 }
