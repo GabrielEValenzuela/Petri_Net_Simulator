@@ -261,7 +261,6 @@ public class MatricesAction extends AbstractAction
     private String renderTransitionStates(PetriNetView data)
     {
         TransitionView[] transitionViews = data.getTransitionViews();
-
         if(transitionViews.length == 0)
         {
             return "n/a";
@@ -269,16 +268,19 @@ public class MatricesAction extends AbstractAction
 
         ArrayList result = new ArrayList();
         data.setEnabledTransitions();
+        result.add("");
         for(TransitionView transitionView1 : transitionViews)
         {
             result.add(transitionView1.getName());
         }
+        result.add("Enabled");
         for(TransitionView transitionView : transitionViews)
         {
             result.add((transitionView.isEnabled() ? "yes" : "no"));
         }
         data.resetEnabledTransitions();
 
-        return ResultsHTMLPane.makeTable(result.toArray(), transitionViews.length, false, true, true, false);
+        return ResultsHTMLPane.makeTable(
+                result.toArray(), transitionViews.length + 1, false, false, true, true);
     }
 }
