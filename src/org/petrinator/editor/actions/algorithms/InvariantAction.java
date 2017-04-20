@@ -144,10 +144,9 @@ public class InvariantAction extends AbstractAction
      * this. The method calls have been changed to pass the current markup matrix
      * as the parameter for invariant analysis.
      *
-     * @param pnmlData
+     * @param pnmlData Petri net to be analyzed
      * @author Nadeem Akharware
-     * @version 1.2
-     * @return
+     * @return html information to write to panel
      */
     private String analyse(PetriNetView pnmlData)
     {

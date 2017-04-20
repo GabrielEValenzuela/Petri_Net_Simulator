@@ -2,6 +2,7 @@ package org.petrinator.editor.actions.algorithms;
 
 import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.*;
+import org.petrinator.util.GraphicsTools;
 import pipe.gui.widgets.ButtonBar;
 import pipe.gui.widgets.EscapableDialog;
 import pipe.gui.widgets.PetriNetChooserPanel;
@@ -21,14 +22,18 @@ import java.util.Date;
 import java.util.Vector;
 
 /**
- * @author Joaquin Felici <joaquinfelici at gmail.com>
- * @brief
+ * MinimalSiphons computes minimal siphons and minimals traps of a Petri Net.
+ * This module implements the algorithm presented in:
+ * R. Cordone, L. Ferrarini, L. Piroddi, "Some Results on the Computation of
+ * Minimal Siphons in Petri Nets"; Proceedings of the 42nd IEEE Conference on
+ * Decision and Control, pp 3754-3759, Maui, Hawaii (USA), December 2003.
+ *
+ * @author Pere Bonet
  */
 public class SiphonsAction extends AbstractAction
 {
     Root root;
     private static final String MODULE_NAME = "Siphons and traps";
-    private PetriNetChooserPanel sourceFilePanel;
     private ResultsHTMLPane results;
 
     public SiphonsAction(Root root)
@@ -37,6 +42,7 @@ public class SiphonsAction extends AbstractAction
         String name = "Siphons and traps";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -71,30 +77,30 @@ public class SiphonsAction extends AbstractAction
         //sourceFilePanel = new PetriNetChooserPanel("Source net", null);
         results = new ResultsHTMLPane("");
         contentPane.add(results);
-        contentPane.add(new ButtonBar("Calculate", calculateButtonClick, guiDialog.getRootPane()));
+        contentPane.add(new ButtonBar("Analyze", analyseButtonClick, guiDialog.getRootPane()));
         guiDialog.pack();
         guiDialog.setLocationRelativeTo(root.getParentFrame());
         guiDialog.setVisible(true);
     }
 
-    private final ActionListener calculateButtonClick = new ActionListener() {
+    private final ActionListener analyseButtonClick = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
             /*
              * Read tmp file
              */
             PetriNetView sourceDataLayer = new PetriNetView("tmp/tmp.pnml");
-            //String s = "<h2>Minimal Siphons and Minimal Traps</h2>";
             String s = "";
 
             if (sourceDataLayer == null) {
                 return;
             }
-
-            if (!sourceDataLayer.hasPlaceTransitionObjects()) {
-                s += "No Petri net objects defined!";
+            if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
+            {
+                s += "Invalid net!";
             } else {
                 try {
-                    //s += analyse(sourceDataLayer);
+                    MinimalSiphons siphonsAlgorithm = new MinimalSiphons();
+                    s += siphonsAlgorithm.analyse(sourceDataLayer);
                     results.setEnabled(true);
                 } catch (OutOfMemoryError oome) {
                     System.gc();

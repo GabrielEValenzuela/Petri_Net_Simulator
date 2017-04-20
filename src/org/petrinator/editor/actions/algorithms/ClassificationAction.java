@@ -1,11 +1,7 @@
 package org.petrinator.editor.actions.algorithms;
 
 import org.petrinator.editor.Root;
-import org.petrinator.editor.filechooser.FileChooserDialog;
-import org.petrinator.editor.filechooser.FileType;
-import org.petrinator.editor.filechooser.FileTypeException;
-import org.petrinator.editor.filechooser.PipePnmlFileType;
-
+import org.petrinator.editor.filechooser.*;
 import org.petrinator.util.GraphicsTools;
 import pipe.calculations.myTree;
 import pipe.exceptions.EmptyNetException;
@@ -29,7 +25,6 @@ import java.util.LinkedList;
 
 /**
  * @author Joaquin Felici <joaquinfelici at gmail.com>
- * @brief
  */
 public class ClassificationAction extends AbstractAction
 {
