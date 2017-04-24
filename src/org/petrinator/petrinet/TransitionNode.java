@@ -19,14 +19,19 @@ package org.petrinator.petrinet;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Leandro Asson leoasson at gmail.com
+ */
 public abstract class TransitionNode extends Node implements Cloneable
 {
     //initial state
     private String behavior = "<F,I,(!none)>";
     private boolean automatic = false;
     private boolean informed = true;
-    private String guard = "none";
     private boolean enablewhentrue = false;
+    private boolean timed = false;
+    private String guard = "none";
+    private double rate = 1.0;
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -85,12 +90,31 @@ public abstract class TransitionNode extends Node implements Cloneable
     }
 
     /**
+     * If the transition is timed return true, else return false.
+     * @return timed.
+     */
+    public boolean isTimed()
+    {
+        return timed;
+    }
+
+    /**
      * Return the name of the guard
      * @return guard.
      */
     public String getGuard()
     {
         return guard;
+    }
+
+    /**
+     * Return the rate
+     *
+     * @return rate
+     */
+    public  double getRate()
+    {
+        return rate;
     }
 
     /**
@@ -132,5 +156,26 @@ public abstract class TransitionNode extends Node implements Cloneable
     {
         this.enablewhentrue = enablewhentrue;
     }
+
+    /**
+     * Sets a new rate.
+     *
+     * @param rate - state to set.
+     */
+    public void setRate(double rate)
+    {
+        this.rate = rate;
+    }
+
+    /**
+     * Set time.
+     *
+     * @param timed - time to set.
+     */
+    public void setTime(boolean timed)
+    {
+        this.timed = timed;
+    }
+
 
 }

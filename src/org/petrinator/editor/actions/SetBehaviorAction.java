@@ -1,17 +1,14 @@
 package org.petrinator.editor.actions;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.*;
+
 import net.miginfocom.swing.MigLayout;
 import org.petrinator.editor.Root;
-import org.petrinator.editor.commands.SetBehaviorCommand;
-import org.petrinator.exception.BehaviorException;
-import org.petrinator.petrinet.Node;
+import org.petrinator.editor.commands.SetLabelCommand;;
 import org.petrinator.petrinet.TransitionNode;
 import org.petrinator.util.GraphicsTools;
 
@@ -20,7 +17,6 @@ import org.petrinator.util.GraphicsTools;
  *
  * @author Leandro Asson leoasson at gmail.com
  */
-
 public class SetBehaviorAction extends AbstractAction{
 	private Root root;
 
@@ -36,52 +32,108 @@ public class SetBehaviorAction extends AbstractAction{
     public void actionPerformed(ActionEvent e) {
         if (root.getClickedElement() != null && root.getClickedElement() instanceof TransitionNode)
         {
-            //Node clickedNode = (Node) root.getClickedElement();
 			TransitionNode clickedTransition = (TransitionNode) root.getClickedElement();
+			String newBehavior;
+			String guardValue;
+			boolean automatic;
+			boolean informed;
+			boolean enablewhentrue;
+			boolean timed;
                              
-            JTextField guard = new JTextField(8);
+            JTextField field_guard = new JTextField(8);
+            JTextField field_label = new JTextField(8);
+			JTextField field_rate = new JTextField(8);
             JCheckBox checkBoxAutomatic = new JCheckBox();
             JCheckBox checkBoxInformed = new JCheckBox();
             JCheckBox checkBoxEnablewhentrue = new JCheckBox();
-            JPanel myPanel = new JPanel(); 
-            
-            String newBehavior;
-            String guardValue;
-            boolean automatic;
-            boolean informed;
-            boolean enablewhentrue;
-            
+            JCheckBox checkBoxTimed = new JCheckBox();
+            JPanel myPanel = new JPanel();
+
             myPanel.setLayout(new MigLayout());
-            myPanel.add(new JLabel("Automatic:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxAutomatic,"wrap");
-            myPanel.add(new JLabel("Informed:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxInformed,"wrap");
-            myPanel.add(new JLabel("Guard:  "));
-            myPanel.add(new JLabel ("    "));
-            myPanel.add(guard,"wrap");
-            myPanel.add(new JLabel("Enable when true:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxEnablewhentrue);
+			myPanel.add(new JLabel("Label:  "));
+			myPanel.add(field_label,"span, grow");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JSeparator(), "span, growx, wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel("Automatic:"));
+			myPanel.add(checkBoxAutomatic);
+			myPanel.add(new JLabel("Informed:"));
+			myPanel.add(checkBoxInformed, "wrap");
+			myPanel.add(new JLabel("Timed:"));
+			myPanel.add(checkBoxTimed);
+			myPanel.add(new JLabel("Rate:  "));
+			myPanel.add(field_rate, "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JSeparator(), "span, growx, wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel("Enable when true:"));
+			myPanel.add(checkBoxEnablewhentrue);
+			myPanel.add(new JLabel("Guard:  "));
+			myPanel.add(field_guard, "wrap");
 
 			//set in the panel the behavior of the transition.
+			field_label.setText(clickedTransition.getLabel());
+			field_guard.setText(clickedTransition.getGuard());
+			field_rate.setText(Double.toString(clickedTransition.getRate()));
 			checkBoxAutomatic.setSelected(clickedTransition.isAutomatic());
 			checkBoxInformed.setSelected(clickedTransition.isInformed());
-			guard.setText(clickedTransition.getGuard());
 			checkBoxEnablewhentrue.setSelected(clickedTransition.isEnablewhentrue());
-     
-            int result = JOptionPane.showConfirmDialog(null, myPanel, 
-                    "Set behavior", JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) 
+			checkBoxTimed.setSelected(clickedTransition.isTimed());
+
+			if(clickedTransition.isTimed())
+			{
+				field_rate.setEnabled(true);
+			}
+			else
+			{
+				field_rate.setEnabled(false);
+			}
+
+			checkBoxTimed.addItemListener(new ItemListener(){
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED){
+						field_rate.setEnabled(true);
+						field_rate.setText(Double.toString(clickedTransition.getRate()));
+					}
+					else if(e.getStateChange() == ItemEvent.DESELECTED){
+						field_rate.setEnabled(false);
+						field_rate.setText(Double.toString(clickedTransition.getRate()));
+					}
+					myPanel.validate();
+					myPanel.repaint();
+				}
+			});
+
+            int result = JOptionPane.showConfirmDialog(root.getParentFrame(), myPanel,
+                    "Transition properties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION)
             {
-               guardValue= guard.getText();
+               guardValue = field_guard.getText();
                automatic = checkBoxAutomatic.isSelected();
                informed = checkBoxInformed.isSelected();
+               timed = checkBoxTimed.isSelected();
                enablewhentrue = checkBoxEnablewhentrue.isSelected();
-               
-               newBehavior = generateBehavior(automatic,informed,guardValue,enablewhentrue);
-               root.getUndoManager().executeCommand(new SetBehaviorCommand(clickedTransition, newBehavior, automatic, informed, guardValue, enablewhentrue));
+               clickedTransition.setGuard(field_guard.getText());
+               root.getUndoManager().executeCommand(new SetLabelCommand(clickedTransition,field_label.getText()));
+               clickedTransition.setBehavior(generateBehavior(automatic,informed,guardValue,enablewhentrue));
+               clickedTransition.setAutomatic(automatic);
+               clickedTransition.setInformed(informed);
+               clickedTransition.setEnableWhenTrue(enablewhentrue);
+               clickedTransition.setTime(timed);
+               try
+			   {
+				   clickedTransition.setRate(Double.parseDouble(field_rate.getText()));
+			   }
+			   catch(NumberFormatException e1)
+			   {
+				   JOptionPane.showMessageDialog(null, "Invalid number");
+				   return; // Don't execute further code
+			   }
             }
          }
     }

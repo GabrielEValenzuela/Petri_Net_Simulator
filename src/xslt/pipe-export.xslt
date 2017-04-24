@@ -93,6 +93,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                 </position>
             </graphics>
+            <rate>
+                <value>
+                    <xsl:value-of select="rate"></xsl:value-of>
+                </value>
+            </rate>
+            <timed>
+                <value>
+                    <xsl:value-of select="timed"></xsl:value-of>
+                </value>
+            </timed>
+
         </transition>
     </xsl:for-each>
     <xsl:for-each select="arc"><arc provider="petrinet.provider.weightededge">

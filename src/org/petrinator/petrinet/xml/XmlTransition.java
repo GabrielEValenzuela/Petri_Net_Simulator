@@ -30,4 +30,10 @@ public class XmlTransition extends XmlNode {
     @XmlElement(name = "behavior")
     public String behavior;
 
+    @XmlElement(name = "rate")
+    public double rate;
+
+    @XmlElement(name = "timed")
+    public String timed;
+
 }
