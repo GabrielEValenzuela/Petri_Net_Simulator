@@ -1,5 +1,6 @@
 package org.petrinator.editor.actions.algorithms;
 
+import org.petrinator.auxiliar.GraphFrame;
 import org.petrinator.editor.Root;
 import org.petrinator.editor.filechooser.*;
 import org.petrinator.util.GraphicsTools;
@@ -8,6 +9,7 @@ import pipe.gui.widgets.EscapableDialog;
 import pipe.gui.widgets.ResultsHTMLPane;
 import java.util.Date;
 
+import pipe.modules.reachability.ReachabilityGraphGenerator;
 import pipe.views.*;
 
 import javax.swing.*;
@@ -30,30 +32,11 @@ import javax.swing.JOptionPane;
 
 import pipe.calculations.StateSpaceGenerator;
 import pipe.calculations.myTree;
-import pipe.exceptions.MarkingNotIntegerException;
-import pipe.exceptions.TimelessTrapException;
-import pipe.exceptions.TreeTooBigException;
-import pipe.extensions.jpowergraph.PIPEInitialState;
-import pipe.extensions.jpowergraph.PIPEInitialTangibleState;
-import pipe.extensions.jpowergraph.PIPEInitialVanishingState;
-import pipe.extensions.jpowergraph.PIPELoopWithTextEdge;
-import pipe.extensions.jpowergraph.PIPEState;
-import pipe.extensions.jpowergraph.PIPETangibleState;
-import pipe.extensions.jpowergraph.PIPEVanishingState;
 import pipe.gui.ApplicationSettings;
-import pipe.gui.widgets.ButtonBar;
-import pipe.gui.widgets.EscapableDialog;
-import pipe.gui.widgets.GraphFrame;
-import pipe.gui.widgets.PetriNetChooserPanel;
-import pipe.gui.widgets.ResultsHTMLPane;
-import pipe.io.ImmediateAbortException;
-import pipe.io.IncorrectFileFormatException;
-import pipe.io.ReachabilityGraphFileHeader;
-import pipe.io.StateRecord;
-import pipe.io.TransitionRecord;
-import pipe.modules.interfaces.IModule;
-import pipe.utilities.Expander;
-import pipe.utilities.writers.PNMLWriter;
+import pipe.controllers.PipeApplicationController;
+import pipe.models.PipeApplicationModel;
+import net.sourceforge.jpowergraph.defaults.DefaultGraph;
+import net.sourceforge.jpowergraph.defaults.DefaultNode;
 import pipe.views.PetriNetView;
 
 /**
@@ -70,6 +53,7 @@ import pipe.views.PetriNetView;
 public class ReachabilityAction extends AbstractAction
 {
     Root root;
+    String graphName = "";
     private ResultsHTMLPane results;
 
     public ReachabilityAction(Root root)
@@ -81,7 +65,8 @@ public class ReachabilityAction extends AbstractAction
         //putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         /*
          * Create tmp.pnml file
          */
@@ -107,7 +92,7 @@ public class ReachabilityAction extends AbstractAction
         /*
          * Show initial pane
          */
-        EscapableDialog guiDialog = new EscapableDialog(root.getParentFrame(), "Reachabilty graph", true);
+        EscapableDialog guiDialog = new EscapableDialog(root.getParentFrame(), "Reachabilty graph", false);
         Container contentPane = guiDialog.getContentPane();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
         //sourceFilePanel = new PetriNetChooserPanel("Source net", null);
@@ -147,31 +132,37 @@ public class ReachabilityAction extends AbstractAction
             {
                 try
                 {
-                    String graph = "Reachability graph";
-                    boolean generateCoverability = false;
+                    /*
+                     * Check if petri net is bounded
+                     */
+                    LinkedList<MarkingView>[] markings = sourcePetriNetView.getCurrentMarkingVector();
+                    int[] markup = new int[markings.length];
+                    for(int k = 0; k < markings.length; k++)
+                    {
+                        markup[k] = markings[k].getFirst().getCurrentMarking();
+                    }
+                    myTree tree = new myTree(sourcePetriNetView, markup);
+                    boolean bounded = !tree.foundAnOmega;
 
-                    try
+                    if(bounded)
                     {
                         StateSpaceGenerator.generate(sourcePetriNetView, reachabilityGraph);
+                        graphName = "Reachability graph";
+                        System.out.println("Reachability graph successfully created");
                     }
-                    catch(OutOfMemoryError e) // If this error is captured, then the net seems to be bounded
+                    else
                     {
-                        generateCoverability = true;
-                    }
-
-                    /*
-                     * If we found the net to be unbounded, then we need to create the coverability graph
-                     */
-                    if(generateCoverability)
-                    {
-                        LinkedList<MarkingView>[] markings = sourcePetriNetView.getCurrentMarkingVector();
+                         /*
+                          * If we found the net to be unbounded, then we need to create the coverability graph
+                          */
+                        LinkedList<MarkingView>[] graphMarkings = sourcePetriNetView.getCurrentMarkingVector();
                         int[] currentMarking = new int[markings.length];
                         for(int i = 0; i < markings.length; i++)
                         {
                             currentMarking[i] = markings[i].getFirst().getCurrentMarking();
                         }
-                        myTree tree = new myTree(sourcePetriNetView, currentMarking, reachabilityGraph);
-                        graph = "Coverability graph";
+                        myTree graphTree = new myTree(sourcePetriNetView, currentMarking, reachabilityGraph);
+                        graphName = "Coverability graph";
                     }
 
                     /*
@@ -179,14 +170,14 @@ public class ReachabilityAction extends AbstractAction
                      */
                     gfinished = new Date().getTime();
                     System.gc();
-                    //generateGraph(reachabilityGraph, sourcePetriNetView, generateCoverability);
+                    generateGraph(reachabilityGraph, sourcePetriNetView, !bounded);
                     allfinished = new Date().getTime();
                     graphtime = (gfinished - start) / 1000.0;
                     constructiontime = (allfinished - gfinished) / 1000.0;
                     totaltime = (allfinished - start) / 1000.0;
                     DecimalFormat f = new DecimalFormat();
                     f.setMaximumFractionDigits(5);
-                    s += "<br>Generating " + graph + " took " +
+                    s += "<br>Generating " + graphName + " took " +
                             f.format(graphtime) + "s";
                     s += "<br>Constructing it took " +
                             f.format(constructiontime) + "s";
@@ -197,14 +188,29 @@ public class ReachabilityAction extends AbstractAction
                 {
                     e.printStackTrace();
                 }
-
-
+                results.setText(s);
             }
-
-
-
-
-
         }
     };
+
+    public void generateGraph(File rgFile, PetriNetView dataLayer, boolean coverabilityGraph) throws Exception
+    {
+        ReachabilityGraphGenerator graphGenerator = new ReachabilityGraphGenerator();
+
+        DefaultGraph graph = graphGenerator.createGraph(rgFile, dataLayer, coverabilityGraph);
+
+        GraphFrame frame = new GraphFrame();
+        PlaceView[] placeView = dataLayer.places();
+        String legend = "";
+        if (placeView.length > 0) {
+            legend = "{" + placeView[0].getName();
+        }
+        for (int i = 1; i < placeView.length; i++) {
+            legend += ", " + placeView[i].getName();
+        }
+        legend += "}";
+        frame.setTitle(graphName);
+        frame.constructGraphFrame(graph, legend, root);
+        frame.toFront();
+    }
 }
