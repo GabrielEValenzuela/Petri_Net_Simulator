@@ -33,11 +33,17 @@ public class Transition extends TransitionNode implements Cloneable {
 	static boolean showBehavior = false;
 	
     @Override
-    public void draw(Graphics g, DrawingOptions drawingOptions) {
+    public void draw(Graphics g, DrawingOptions drawingOptions)
+    {
         g.setColor(Color.white);
         g.fillRect(getStart().x, getStart().y, getWidth(), getHeight());
         g.setColor(color);
         g.drawRect(getStart().x, getStart().y, getWidth() - 1, getHeight() - 1);
+        if(super.isTimed())
+        {
+            int rectanglesGap = 5;
+            g.drawRect(getStart().x + rectanglesGap, getStart().y + rectanglesGap, getWidth() - 1 - 2 * rectanglesGap, getHeight() - 1 - 2 * rectanglesGap);
+        }
         drawLabel(g);
     }
 
