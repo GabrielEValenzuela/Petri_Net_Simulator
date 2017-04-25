@@ -62,7 +62,7 @@ public class ReachabilityAction extends AbstractAction
         String name = "Reachabilty/Coverability graph";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
-        //putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
     }
 
     public void actionPerformed(ActionEvent e)
@@ -163,6 +163,7 @@ public class ReachabilityAction extends AbstractAction
                         }
                         myTree graphTree = new myTree(sourcePetriNetView, currentMarking, reachabilityGraph);
                         graphName = "Coverability graph";
+                        System.out.println("Coverability graph successfully created");
                     }
 
                     /*
