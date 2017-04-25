@@ -177,14 +177,18 @@ public class SimulateAction extends AbstractAction
          */
     	 PetriNetFactory factory = new PetriNetFactory("tmp/tmp.pnml");
          RootPetriNet petri;
-		 try {  // The exception tell us if there's two places or transitions with the same name
+
+		 try
+         {  // The exception tell us if there's two places or transitions with the same name
 		     petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
-		 } catch (DuplicatedNameError e){
+		 } catch (DuplicatedNameError e)
+         {
              JOptionPane.showMessageDialog(null, "Two places or transitions cannot have the same label");
              stop = false;
              setEnabled(true);
              return; // Don't execute further code
          }
+
 		 TransitionsPolicy policy = new FirstInLinePolicy();
 		 PetriMonitor monitor = new PetriMonitor(petri, policy);
 		 
