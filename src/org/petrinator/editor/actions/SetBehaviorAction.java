@@ -1,17 +1,15 @@
 package org.petrinator.editor.actions;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.*;
+
 import net.miginfocom.swing.MigLayout;
 import org.petrinator.editor.Root;
-import org.petrinator.editor.commands.SetBehaviorCommand;
-import org.petrinator.exception.BehaviorException;
-import org.petrinator.petrinet.Node;
+import org.petrinator.editor.commands.SetLabelCommand;;
+import org.petrinator.petrinet.TransitionNode;
 import org.petrinator.util.GraphicsTools;
 
 /**
@@ -19,7 +17,6 @@ import org.petrinator.util.GraphicsTools;
  *
  * @author Leandro Asson leoasson at gmail.com
  */
-
 public class SetBehaviorAction extends AbstractAction{
 	private Root root;
 
@@ -33,68 +30,113 @@ public class SetBehaviorAction extends AbstractAction{
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (root.getClickedElement() != null
-                && root.getClickedElement() instanceof Node)
+        if (root.getClickedElement() != null && root.getClickedElement() instanceof TransitionNode)
         {
-            Node clickedNode = (Node) root.getClickedElement();
+			TransitionNode clickedTransition = (TransitionNode) root.getClickedElement();
+			String newBehavior;
+			String guardValue;
+			boolean automatic;
+			boolean informed;
+			boolean enablewhentrue;
+			boolean timed;
                              
-            JTextField guard = new JTextField(8);
+            JTextField field_guard = new JTextField(8);
+            JTextField field_label = new JTextField(8);
+			JTextField field_rate = new JTextField(8);
             JCheckBox checkBoxAutomatic = new JCheckBox();
             JCheckBox checkBoxInformed = new JCheckBox();
-            JCheckBox checkBoxsInitialState = new JCheckBox();            
-            JPanel myPanel = new JPanel(); 
-            
-            String newBehavior;
-            String guardValue;
-            boolean automatic;
-            boolean informed;
-            boolean initialState;
-            
+            JCheckBox checkBoxEnablewhentrue = new JCheckBox();
+            JCheckBox checkBoxTimed = new JCheckBox();
+            JPanel myPanel = new JPanel();
+
             myPanel.setLayout(new MigLayout());
-            myPanel.add(new JLabel("Automatic:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxAutomatic,"wrap");
-            myPanel.add(new JLabel("Informed:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxInformed,"wrap");
-            myPanel.add(new JLabel("Guard:  "));
-            myPanel.add(new JLabel ("    "));
-            myPanel.add(guard,"wrap");
-            myPanel.add(new JLabel("Enable when true:"));
-            myPanel.add(new JLabel (" "));
-            myPanel.add(checkBoxsInitialState);    
-            
-            
-            
-            String[] oldBehavior;
-			try {
-				oldBehavior = setPanel(clickedNode);
-				checkBoxAutomatic.setSelected(Boolean.valueOf(oldBehavior[0]));
-	            checkBoxInformed.setSelected(Boolean.valueOf(oldBehavior[1]));
-	            guard.setText(oldBehavior[2]);
-	            checkBoxsInitialState.setSelected(Boolean.valueOf(oldBehavior[3]));
-			} catch (BehaviorException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-            
-              
-     
-            int result = JOptionPane.showConfirmDialog(null, myPanel, 
-                    "Set behavior", JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) 
+			myPanel.add(new JLabel("Label:  "));
+			myPanel.add(field_label,"span, grow");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JSeparator(), "span, growx, wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel("Automatic:"));
+			myPanel.add(checkBoxAutomatic);
+			myPanel.add(new JLabel("Informed:"));
+			myPanel.add(checkBoxInformed, "wrap");
+			myPanel.add(new JLabel("Timed:"));
+			myPanel.add(checkBoxTimed);
+			myPanel.add(new JLabel("Rate:  "));
+			myPanel.add(field_rate, "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JSeparator(), "span, growx, wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel(""), "wrap");
+			myPanel.add(new JLabel("Enable when true:"));
+			myPanel.add(checkBoxEnablewhentrue);
+			myPanel.add(new JLabel("Guard:  "));
+			myPanel.add(field_guard, "wrap");
+
+			//set in the panel the behavior of the transition.
+			field_label.setText(clickedTransition.getLabel());
+			field_guard.setText(clickedTransition.getGuard());
+			field_rate.setText(Double.toString(clickedTransition.getRate()));
+			checkBoxAutomatic.setSelected(clickedTransition.isAutomatic());
+			checkBoxInformed.setSelected(clickedTransition.isInformed());
+			checkBoxEnablewhentrue.setSelected(clickedTransition.isEnablewhentrue());
+			checkBoxTimed.setSelected(clickedTransition.isTimed());
+
+			if(clickedTransition.isTimed())
+			{
+				field_rate.setEnabled(true);
+			}
+			else
+			{
+				field_rate.setEnabled(false);
+			}
+
+			checkBoxTimed.addItemListener(new ItemListener(){
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED){
+						field_rate.setEnabled(true);
+						field_rate.setText(Double.toString(clickedTransition.getRate()));
+					}
+					else if(e.getStateChange() == ItemEvent.DESELECTED){
+						field_rate.setEnabled(false);
+						field_rate.setText(Double.toString(clickedTransition.getRate()));
+					}
+					myPanel.validate();
+					myPanel.repaint();
+				}
+			});
+
+            int result = JOptionPane.showConfirmDialog(root.getParentFrame(), myPanel,
+                    "Transition properties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION)
             {
-               guardValue= guard.getText();
+               guardValue = field_guard.getText();
                automatic = checkBoxAutomatic.isSelected();
                informed = checkBoxInformed.isSelected();
-               initialState = checkBoxsInitialState.isSelected();
-               
-               newBehavior = generateBehavior(automatic,informed,guardValue,initialState);
-               root.getUndoManager().executeCommand(new SetBehaviorCommand(clickedNode, newBehavior));
+               timed = checkBoxTimed.isSelected();
+               enablewhentrue = checkBoxEnablewhentrue.isSelected();
+               clickedTransition.setGuard(field_guard.getText());
+               root.getUndoManager().executeCommand(new SetLabelCommand(clickedTransition,field_label.getText()));
+               clickedTransition.setBehavior(generateBehavior(automatic,informed,guardValue,enablewhentrue));
+               clickedTransition.setAutomatic(automatic);
+               clickedTransition.setInformed(informed);
+               clickedTransition.setEnableWhenTrue(enablewhentrue);
+               clickedTransition.setTime(timed);
+               try
+			   {
+				   clickedTransition.setRate(Double.parseDouble(field_rate.getText()));
+			   }
+			   catch(NumberFormatException e1)
+			   {
+				   JOptionPane.showMessageDialog(null, "Invalid number");
+				   return; // Don't execute further code
+			   }
             }
          }
     }
-                 
 
     /**
      * Generates behavior based on the selected configuration.
@@ -110,113 +152,34 @@ public class SetBehaviorAction extends AbstractAction{
      * guard is the name of the guard associated on this transition.
      * Guards can be shared by any amount of transitions and can be negated using ! or ~ token before the guard name.
      * The default values are:
-     * \code
      * automatic: F 
      * informed: I
      * guard: none
      * initialState: false
-     * \endcode
      */
-    public String generateBehavior(boolean automatic, boolean informed, String guardValue, boolean enablewhentrue)
-    {
-    	String behavior;
-    	String statusAutomatic;
-    	String statusInformed;
-    	String statusEnablewhentrue;
-    	if (automatic){
-    		statusAutomatic = "A";
-    	}
-    	else{
-    		statusAutomatic = "F"; 
-    	}
-    	
-    	if (informed){
-    		statusInformed = "I";
-    	}
-    	else{
-    		statusInformed = "N"; 
-    	}
-    	if (enablewhentrue){
-    		statusEnablewhentrue = "";
-    	}
-    	else{
+    public String generateBehavior(boolean automatic, boolean informed, String guardValue, boolean enablewhentrue) {
+		String behavior;
+		String statusAutomatic;
+		String statusInformed;
+		String statusEnablewhentrue;
+		if (automatic) {
+			statusAutomatic = "A";
+		} else {
+			statusAutomatic = "F";
+		}
+
+		if (informed) {
+			statusInformed = "I";
+		} else {
+			statusInformed = "N";
+		}
+
+		if (enablewhentrue) {
+			statusEnablewhentrue = "";
+		} else {
 			statusEnablewhentrue = "!";
-    	}
-    	
-    	behavior="<"+statusAutomatic+","+statusInformed+","+"("+statusEnablewhentrue+guardValue+")"+">";
-    
-    	return behavior;
-    }
-
-    /**
-     * set panel with the old values of the transition.
-     *
-     * @Param node clicked transition.
-     * @return array with the behavior values of the transition.
-     * @throws BehaviorException 
-     */
-    public String[] setPanel(Node node) throws BehaviorException
-    {
-    	
-    	boolean isAutomatic = false;
-		boolean isInformed = false;
-		String guard = "";
-		boolean isNegative = false;
-    	final int AUTOMATIC_INDEX = 0;
-		final int INFORMED_INDEX = 1;
-		final int GUARD_INDEX = 2;
-    	String[] labels = node.getBehavior().split(",");
-    	for( int i = 0; i < labels.length; i++ )
-    	{
-			String label = labels[i];
-			switch(i)
-			{
-			case AUTOMATIC_INDEX:
-				if( !label.contains("A") && !label.contains("D") && !label.contains("F")){
-					throw new BehaviorException("Wrong automatic label: " + label);
-				}
-				isAutomatic = label.contains("A");
-				
-				break;
-			case INFORMED_INDEX:
-				if( !label.contains("I") && !label.contains("N")){
-					throw new BehaviorException("Wrong informed label: " + label);
-				}
-				isInformed = label.contains("I");
-				break;
-			case GUARD_INDEX:
-				try{
-					if(label.charAt(0) != '(' || label.charAt(label.length() - 2) != ')'){
-					 //guard must be enclosed by brackets
-					throw new BehaviorException("Bad formatted guard in " + label + "from label " + labels);
-					}
-					// trim the brackets
-					String guardStr = label.substring(1, label.length() - 2).replaceAll("\\s", "");
-					//check if it's for negative logic
-					boolean negative = (guardStr.charAt(0) == '~' || guardStr.charAt(0) == '!');
-					if (!negative){
-						//discard first char "~"
-						guardStr = guardStr.substring(0);
-						isNegative = true;
-					}
-					else {
-						guardStr = guardStr.substring(1);
-						isNegative = false;					
-					}
-					guard = guardStr;
-				} catch (IndexOutOfBoundsException e){
-				  // nothing wrong, just empty guard
-				}
-			default:
-				break;
-		    }
-    	}
-        String [] behavior = {String.valueOf(isAutomatic),String.valueOf(isInformed), guard, String.valueOf(isNegative)};
-        return behavior;
-    }
+		}
+		behavior = "<" + statusAutomatic + "," + statusInformed + "," + "(" + statusEnablewhentrue + guardValue + ")" + ">";
+		return behavior;
+	}
 }
-	
-	
-	
-	
-

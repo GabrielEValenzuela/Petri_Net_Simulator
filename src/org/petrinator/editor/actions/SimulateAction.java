@@ -139,7 +139,7 @@ public class SimulateAction extends AbstractAction
             }
             catch(NumberFormatException e1)
             {
-                 JOptionPane.showMessageDialog(null, "Invalid number.");
+                 JOptionPane.showMessageDialog(null, "Invalid number");
                  return; // Don't execute further code
             }
         }
