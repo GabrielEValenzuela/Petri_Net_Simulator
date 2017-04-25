@@ -96,7 +96,7 @@ public class MatricesAction extends AbstractAction
             /*
              *  Create HTML file with data
              */
-            String s = "";
+            String s = "<h2>Petri Net Matrices</h2>";
 
             //String s = "<h3>Petri net matrices and marking</h3>"; // Do we REALLY need a third title? Let's think about that...
             if(data == null)

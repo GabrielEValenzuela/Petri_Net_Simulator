@@ -34,8 +34,6 @@ public abstract class Node extends Element implements Comparable<Node> {
 
     private String id;
     private String label;
-    private String behavior = "<F,I,(!none)>";
-
     public Node() 
     {
         setSize(32, 32);
@@ -140,7 +138,8 @@ public abstract class Node extends Element implements Comparable<Node> {
      *
      * @return the label.
      */
-    public String getLabel() {
+    public String getLabel()
+    {
         return label;
     }
 
@@ -149,26 +148,9 @@ public abstract class Node extends Element implements Comparable<Node> {
      *
      * @param label - label to set.
      */
-    public void setLabel(String label) {
+    public void setLabel(String label)
+    {
         this.label = label;
-    }
-    
-    /**
-     * Returns the behavior. 
-     *
-     * @return the behavior.
-     */
-    public String getBehavior() {
-        return behavior;
-    }
-
-    /**
-     * Sets a new behavior.
-     *
-     * @param behavior - behavior to set.
-     */
-    public void setBehavior(String behavior) {
-        this.behavior = behavior;
     }
 
     /**

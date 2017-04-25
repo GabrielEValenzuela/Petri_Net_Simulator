@@ -92,7 +92,7 @@ public class GraphFrame extends JFrame
         getContentPane().add("West", panel);
         if(!markingLegend.equals("") && markingLegend != null)
         {
-            markingLegend = "Marking corresponds to " + markingLegend;
+            markingLegend = "Places order is: " + markingLegend;
         }
 
         JTextArea legend = new JTextArea(markingLegend + "\nHover mouse over nodes to view state marking");

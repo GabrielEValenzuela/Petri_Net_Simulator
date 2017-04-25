@@ -89,7 +89,7 @@ public class SiphonsAction extends AbstractAction
              * Read tmp file
              */
             PetriNetView sourceDataLayer = new PetriNetView("tmp/tmp.pnml");
-            String s = "";
+            String s = "<h2>Siphons and Traps</h2>";
 
             if (sourceDataLayer == null) {
                 return;

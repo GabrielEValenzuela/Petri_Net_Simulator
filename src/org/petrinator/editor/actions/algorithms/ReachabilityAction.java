@@ -92,7 +92,7 @@ public class ReachabilityAction extends AbstractAction
         /*
          * Show initial pane
          */
-        EscapableDialog guiDialog = new EscapableDialog(root.getParentFrame(), "Reachabilty graph", false);
+        EscapableDialog guiDialog = new EscapableDialog(root.getParentFrame(), "Reachabilty/Coverability graph", false);
         Container contentPane = guiDialog.getContentPane();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
         //sourceFilePanel = new PetriNetChooserPanel("Source net", null);
@@ -110,7 +110,7 @@ public class ReachabilityAction extends AbstractAction
              * Read tmp file
              */
             PetriNetView sourcePetriNetView = new PetriNetView("tmp/tmp.pnml");
-            String s = "";
+            String s = "<h2>Reachability/Coverability Graph Information</h2>";
 
             long start = new Date().getTime();
             long gfinished;
@@ -122,7 +122,6 @@ public class ReachabilityAction extends AbstractAction
             /*
              * Let's try to create the reachability graph
              */
-
             File reachabilityGraph = new File("results.rg");
             if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
             {

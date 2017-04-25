@@ -83,7 +83,8 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
     JSplitPane splitPane;
     EventList events = new EventList();
 
-    public Root(String[] args) {
+    public Root(String[] args)
+    {
     	PNEditor.setRoot(this);
 
         loadPreferences();
@@ -101,14 +102,25 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setupFrameIcons();
 
-        if (args.length == 1) {
+        /*
+         * Create tmp directory if it doesn't exist
+         */
+        File directory = new File("tmp");
+        if (!directory.exists())
+        {
+            directory.mkdir();
+        }
+
+        if (args.length == 1)
+        {
             String filename = args[0];
             File file = new File(filename);
             FileType fileType = FileType.getAcceptingFileType(file, FileType.getAllFileTypes());
-            try {
+            try
+            {
                 Document document = fileType.load(file);
                 this.setDocument(document);
-                this.setCurrentFile(file); // TODO: make it DRY with OpenFileAction
+                this.setCurrentFile(file);
                 this.setModified(false);
                 this.setCurrentDirectory(file.getParentFile());
                 canvas.repaint();

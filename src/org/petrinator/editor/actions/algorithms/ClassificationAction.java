@@ -99,7 +99,7 @@ public class ClassificationAction extends AbstractAction
                 return;
             }
 
-            String s = "";
+            String s = "<h2>Petri Net Classification</h2>";
 
             if(!root.getDocument().getPetriNet().getRootSubnet().hasPlaces() || !root.getDocument().getPetriNet().getRootSubnet().hasTransitions())
             {

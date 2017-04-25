@@ -91,8 +91,7 @@ public class InvariantAction extends AbstractAction
         {
             PetriNetView sourceDataLayer = new PetriNetView("tmp/tmp.pnml");
 
-            //String s = "<h2>Petri net invariant analysis results</h2>";
-            String s = "";
+            String s = "<h2>Petri Net Invariant Analysis</h2>";
 
             if(sourceDataLayer == null)
             {

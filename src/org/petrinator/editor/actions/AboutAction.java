@@ -41,7 +41,8 @@ public class AboutAction extends AbstractAction {
         putValue(SHORT_DESCRIPTION, name);
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         JOptionPane.showOptionDialog(
                 root.getParentFrame(),  "                                                      " + "Universidad Nacional de Cordoba, Argentina\n" +
                 root.getAppLongName() + "\n" 
@@ -49,8 +50,14 @@ public class AboutAction extends AbstractAction {
                 + "Authors: \nJoaquin Rodriguez Felici\n	Leandro Asson \n\n"
                 + "Contributors:\n"
                 + "Martin Riesz (PNEditor)\n"
-                + "Milka Knaperekova (Boundedness algorithm)\n"
-                + "J�in Tan�ibok (Reset and inhibitor arc types)\n"
+                + "Ján Tančibok (inhibitor arcs)\n"
+                + "Maxim Gready (Classification) \n"
+                + "James Bloom (Classification) \n"
+                + "Nadeem Akharware (Invariants) \n"
+                + "Matthew Worthington (Reachability) \n"
+                + "Edwin Chung (Reachability) \n"
+                + "Will Master (Reachability) \n"
+                + "Pere Bonet (Siphons) \n"
                 + "\n"
                 + "This program is free software:  you can redistribute it and/or modify          \n"
                 + "it under the terms of the GNU General Public License as published by\n"
@@ -65,7 +72,7 @@ public class AboutAction extends AbstractAction {
                 "About",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
-                null,
+                GraphicsTools.getIcon("icon48.png"),
                 new String[]{"OK"},
                 "OK");
     }
