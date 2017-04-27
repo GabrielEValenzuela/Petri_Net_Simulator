@@ -31,7 +31,7 @@ public class XmlTransition extends XmlNode {
     public String behavior;
 
     @XmlElement(name = "rate")
-    public double rate;
+    public int rate;
 
     @XmlElement(name = "timed")
     public String timed;

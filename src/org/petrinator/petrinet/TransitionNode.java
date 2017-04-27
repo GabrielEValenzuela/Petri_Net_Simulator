@@ -31,7 +31,7 @@ public abstract class TransitionNode extends Node implements Cloneable
     private boolean enablewhentrue = false;
     private boolean timed = false;
     private String guard = "none";
-    private double rate = 1.0;
+    private int rate = 1;
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -112,7 +112,7 @@ public abstract class TransitionNode extends Node implements Cloneable
      *
      * @return rate
      */
-    public  double getRate()
+    public  int getRate()
     {
         return rate;
     }
@@ -162,7 +162,7 @@ public abstract class TransitionNode extends Node implements Cloneable
      *
      * @param rate - state to set.
      */
-    public void setRate(double rate)
+    public void setRate(int rate)
     {
         this.rate = rate;
     }

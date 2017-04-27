@@ -78,7 +78,7 @@ public class SetBehaviorAction extends AbstractAction{
 			//set in the panel the behavior of the transition.
 			field_label.setText(clickedTransition.getLabel());
 			field_guard.setText(clickedTransition.getGuard());
-			field_rate.setText(Double.toString(clickedTransition.getRate()));
+			field_rate.setText(Integer.toString(clickedTransition.getRate()));
 			checkBoxAutomatic.setSelected(clickedTransition.isAutomatic());
 			checkBoxInformed.setSelected(clickedTransition.isInformed());
 			checkBoxEnablewhentrue.setSelected(clickedTransition.isEnablewhentrue());
@@ -127,7 +127,7 @@ public class SetBehaviorAction extends AbstractAction{
                clickedTransition.setTime(timed);
                try
 			   {
-				   clickedTransition.setRate(Double.parseDouble(field_rate.getText()));
+				   clickedTransition.setRate(Integer.parseInt(field_rate.getText()));
 			   }
 			   catch(NumberFormatException e1)
 			   {
