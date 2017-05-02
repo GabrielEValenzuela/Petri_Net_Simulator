@@ -4,17 +4,17 @@ package org.petrinator.editor.actions;
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
  * Copyright (C) 2016-2017 Joaquin Rodriguez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -62,7 +62,7 @@ import java.util.Random;
  */
 public class SimulateAction extends AbstractAction
 {
-	private Root root;
+    private Root root;
     private List<FileType> fileTypes;
     protected static boolean stop = false;
     ActionEvent e;
@@ -76,7 +76,7 @@ public class SimulateAction extends AbstractAction
         putValue(SHORT_DESCRIPTION, name);
     }
 
-    public void actionPerformed(ActionEvent e) 
+    public void actionPerformed(ActionEvent e)
     {
         stop = false;
 
@@ -85,12 +85,12 @@ public class SimulateAction extends AbstractAction
          */
         FileChooserDialog chooser = new FileChooserDialog();
 
-        if (root.getCurrentFile() != null) 
+        if (root.getCurrentFile() != null)
         {
             chooser.setSelectedFile(root.getCurrentFile());
         }
 
-        for (FileType fileType : fileTypes) 
+        for (FileType fileType : fileTypes)
         {
             chooser.addChoosableFileFilter(fileType);
         }
@@ -100,13 +100,13 @@ public class SimulateAction extends AbstractAction
 
         File file = new File("tmp/" + "tmp" + "." + "pnml");
         FileType chosenFileType = (FileType) chooser.getFileFilter();
-        try 
+        try
         {
-        	chosenFileType.save(root.getDocument(), file);
-        } 
-        catch (FileTypeException e1) 
+            chosenFileType.save(root.getDocument(), file);
+        }
+        catch (FileTypeException e1)
         {
-        	e1.printStackTrace();
+            e1.printStackTrace();
         }
 
         /*
@@ -139,8 +139,8 @@ public class SimulateAction extends AbstractAction
             }
             catch(NumberFormatException e1)
             {
-                 JOptionPane.showMessageDialog(null, "Invalid number");
-                 return; // Don't execute further code
+                JOptionPane.showMessageDialog(null, "Invalid number");
+                return; // Don't execute further code
             }
         }
         else {
@@ -175,85 +175,84 @@ public class SimulateAction extends AbstractAction
         /*
          * Create monitor, petri net, and all related variables.
          */
-    	 PetriNetFactory factory = new PetriNetFactory("tmp/prueba.pnml");
-         RootPetriNet petri;
+        PetriNetFactory factory = new PetriNetFactory("tmp/tmp.pnml");
+        RootPetriNet petri;
 
-		 try
-         {  // The exception tell us if there's two places or transitions with the same name
-		     petri = factory.makePetriNet(petriNetType.TIMED);
-		 } catch (DuplicatedNameError e)
-         {
-             JOptionPane.showMessageDialog(null, "Two places or transitions cannot have the same label");
-             stop = false;
-             setEnabled(true);
-             return; // Don't execute further code
-         }
+        try
+        {  // The exception tell us if there's two places or transitions with the same name
+            petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
+        } catch (DuplicatedNameError e)
+        {
+            JOptionPane.showMessageDialog(null, "Two places or transitions cannot have the same label");
+            stop = false;
+            setEnabled(true);
+            return; // Don't execute further code
+        }
 
-		 TransitionsPolicy policy = new FirstInLinePolicy();
-		 PetriMonitor monitor = new PetriMonitor(petri, policy);
-		 
-		 petri.initializePetriNet();
+        TransitionsPolicy policy = new FirstInLinePolicy();
+        PetriMonitor monitor = new PetriMonitor(petri, policy);
+
+        petri.initializePetriNet();
 
 		 /*
 		  * Subscribe to all transitions
 		  */
-		 Observer<String> observer = new ConcreteObserver(root);
-		 for(int i = 0; i < petri.getTransitions().length; i++)
-		 {
-			 MTransition t = petri.getTransitions()[i];
-			 Subscription subscription = monitor.subscribeToTransition(t, observer); 
-		 }
-		 
+        Observer<String> observer = new ConcreteObserver(root);
+        for(int i = 0; i < petri.getTransitions().length; i++)
+        {
+            MTransition t = petri.getTransitions()[i];
+            Subscription subscription = monitor.subscribeToTransition(t, observer);
+        }
+
 		 /*
 		  * Create one thread per transition, start them all to try and fire them.
 		  */
-		 List<Thread> threads = new ArrayList<Thread>();
-		 for(int i = 0; i < petri.getTransitions().length; i++)
-		 {
-			Thread t = createThread(monitor, petri.getTransitions()[i].getName());
-			threads.add(t);
-			t.start();
-		 }
+        List<Thread> threads = new ArrayList<Thread>();
+        for(int i = 0; i < petri.getTransitions().length; i++)
+        {
+            Thread t = createThread(monitor, petri.getTransitions()[i].getName());
+            threads.add(t);
+            t.start();
+        }
 
-		 System.out.println("Started firing");
+        System.out.println("Started firing");
 
-         ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
-         dialog.show(true);
+        ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
+        dialog.show(true);
 
 		 /*
 		  * Wait for the number of events to occur
 		  */
-		 while(true)
-         {
-             //System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
+        while(true)
+        {
+            //System.out.println(((ConcreteObserver) observer).getEvents().size() + " | Tread " + threads.get(0).getId() + " " +  threads.get(0).getState() + " | Tread " + threads.get(1).getId() + " " + threads.get(1).getState() + "\n");
 
-             //for(int i= 0; i<petri.getEnabledTransitions().length; i++)
-             //    System.out.print(petri.getEnabledTransitions()[i]);
+            //for(int i= 0; i<petri.getEnabledTransitions().length; i++)
+            //    System.out.print(petri.getEnabledTransitions()[i]);
 
-             if(((ConcreteObserver) observer).getEvents().size() >= numberOfTransitions)  // If there have been N events already
-                 break;
-             else
-             {
-                 try
-                 {
-                     Thread.currentThread().sleep(10);
-                 } catch (InterruptedException e1) {
-                     e1.printStackTrace();
-                 }
-                 // System.out.println(""); // Need at least one instruction in while, otherwise it will explode
-                 /*if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
-                 {
-                     JOptionPane.showMessageDialog(null, "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
-                     break;
-                 }
-                 else if(blockedMonitor(threads))
-                 {
-                     System.out.println("Monitor blocked");
-                     break;
-                 }
-                 */
-             }
-         }
+            if(((ConcreteObserver) observer).getEvents().size() >= numberOfTransitions)  // If there have been N events already
+                break;
+            else
+            {
+                try
+                {
+                    Thread.currentThread().sleep(10);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                // System.out.println(""); // Need at least one instruction in while, otherwise it will explode
+                if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
+                {
+                    JOptionPane.showMessageDialog(null, "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
+                    break;
+                }
+                else if(blockedMonitor(threads))
+                {
+                    System.out.println("Monitor blocked");
+                    break;
+                }
+            }
+        }
 
         System.out.println("Started simulation");
         dialog.show(false);
@@ -261,10 +260,10 @@ public class SimulateAction extends AbstractAction
          /*
           * Stop all threads from firing
           */
-         for(Thread t: threads)
-         {
-             t.stop();
-         }
+        for(Thread t: threads)
+        {
+            t.stop();
+        }
 
         /*
          * We simulate to press the EditTokens/EditTransition button so the enabled transitions
@@ -287,25 +286,25 @@ public class SimulateAction extends AbstractAction
      */
     Thread createThread(PetriMonitor m, String id)
     {
-    	Thread t = new Thread(new Runnable() {
-			  @Override
-                    public void run()
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                while(true)
+                {
+                    try
                     {
-                        while(true)
-                        {
-                            try
-                            {
-                                Thread.sleep((new Random()).nextInt(50));
-                                m.fireTransition(id);
-                            } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                        Thread.sleep((new Random()).nextInt(50));
+                        m.fireTransition(id);
+                    } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-			  }
-			});
-			return t;
+                }
+            }
+        });
+        return t;
     }
 
     /*

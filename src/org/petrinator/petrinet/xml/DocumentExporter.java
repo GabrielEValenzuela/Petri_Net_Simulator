@@ -146,6 +146,10 @@ public class DocumentExporter {
         xmlTransition.rate = transition.getRate();
         xmlTransition.timed = transition.isTimed();
         xmlTransition.behavior = transition.getBehavior();
+        xmlTransition.automatic = transition.isAutomatic();
+        xmlTransition.informed = transition.isInformed();
+        xmlTransition.enableWhenTrue = transition.isEnablewhentrue();
+        xmlTransition.guard = transition.getGuard();
         return xmlTransition;
     }
 

@@ -31,7 +31,7 @@ public abstract class TransitionNode extends Node implements Cloneable
     private boolean enablewhentrue = false;
     private boolean timed = false;
     private String guard = "none";
-    private int rate = 1;
+    private double rate = 1.0;
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -112,7 +112,7 @@ public abstract class TransitionNode extends Node implements Cloneable
      *
      * @return rate
      */
-    public  int getRate()
+    public double getRate()
     {
         return rate;
     }
@@ -162,7 +162,7 @@ public abstract class TransitionNode extends Node implements Cloneable
      *
      * @param rate - state to set.
      */
-    public void setRate(int rate)
+    public void setRate(double rate)
     {
         this.rate = rate;
     }
@@ -177,5 +177,48 @@ public abstract class TransitionNode extends Node implements Cloneable
         this.timed = timed;
     }
 
+    /**
+     * Generates behavior based on the selected configuration.
+     * @param automatic value that determines if the transition is automatic.
+     * @param informed value that determines if the transition is informed.
+     * @param guardValue Name of the guard.
+     * @param enablewhentrue Initial State of the guard.
+     * The syntax of the behavior is the following:
+     * &lt;automatic,informed,(~guard_name)&gt;
+     * where:
+     * automatic can be A for the automatic transition or F for fired transition.
+     * informed can be I for the informed transition or N for non-informed transition.
+     * guard is the name of the guard associated on this transition.
+     * Guards can be shared by any amount of transitions and can be negated using ! or ~ token before the guard name.
+     * The default values are:
+     * automatic: F
+     * informed: I
+     * guard: none
+     * initialState: false
+     */
+    public void generateBehavior(boolean automatic, boolean informed, String guardValue, boolean enablewhentrue) {
+        String behavior;
+        String statusAutomatic;
+        String statusInformed;
+        String statusEnablewhentrue;
+        if (automatic) {
+            statusAutomatic = "A";
+        } else {
+            statusAutomatic = "F";
+        }
 
+        if (informed) {
+            statusInformed = "I";
+        } else {
+            statusInformed = "N";
+        }
+
+        if (enablewhentrue) {
+            statusEnablewhentrue = "";
+        } else {
+            statusEnablewhentrue = "!";
+        }
+        behavior = "<" + statusAutomatic + "," + statusInformed + "," + "(" + statusEnablewhentrue + guardValue + ")" + ">";
+        setBehavior(behavior);
+    }
 }
