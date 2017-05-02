@@ -199,6 +199,8 @@ public class DocumentImporter {
         transition.setId(xmlTransition.id);
         transition.setLabel(xmlTransition.label);
         transition.setCenter(xmlTransition.x, xmlTransition.y);
+        transition.setTime(xmlTransition.timed);
+        transition.setRate(xmlTransition.rate);
         return transition;
     }
 

@@ -175,12 +175,12 @@ public class SimulateAction extends AbstractAction
         /*
          * Create monitor, petri net, and all related variables.
          */
-    	 PetriNetFactory factory = new PetriNetFactory("tmp/tmp.pnml");
+    	 PetriNetFactory factory = new PetriNetFactory("tmp/prueba.pnml");
          RootPetriNet petri;
 
 		 try
          {  // The exception tell us if there's two places or transitions with the same name
-		     petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
+		     petri = factory.makePetriNet(petriNetType.TIMED);
 		 } catch (DuplicatedNameError e)
          {
              JOptionPane.showMessageDialog(null, "Two places or transitions cannot have the same label");
@@ -241,7 +241,7 @@ public class SimulateAction extends AbstractAction
                      e1.printStackTrace();
                  }
                  // System.out.println(""); // Need at least one instruction in while, otherwise it will explode
-                 if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
+                 /*if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
                  {
                      JOptionPane.showMessageDialog(null, "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
                      break;
@@ -251,6 +251,7 @@ public class SimulateAction extends AbstractAction
                      System.out.println("Monitor blocked");
                      break;
                  }
+                 */
              }
          }
 

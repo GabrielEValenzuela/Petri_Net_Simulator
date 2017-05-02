@@ -34,6 +34,6 @@ public class XmlTransition extends XmlNode {
     public int rate;
 
     @XmlElement(name = "timed")
-    public String timed;
+    public boolean timed;
 
 }
