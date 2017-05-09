@@ -34,6 +34,19 @@ public class XmlTransition extends XmlNode {
     public double rate;
 
     @XmlElement(name = "timed")
-    public String timed;
+    public boolean timed;
+
+    @XmlElement(name = "informed")
+    public boolean informed;
+
+    @XmlElement(name = "automatic")
+    public boolean automatic;
+
+    @XmlElement(name = "guard")
+    public String guard;
+
+    @XmlElement(name = "enableWhenTrue")
+    public boolean enableWhenTrue;
+
 
 }

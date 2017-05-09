@@ -120,7 +120,7 @@ public class SetBehaviorAction extends AbstractAction{
                enablewhentrue = checkBoxEnablewhentrue.isSelected();
                clickedTransition.setGuard(field_guard.getText());
                root.getUndoManager().executeCommand(new SetLabelCommand(clickedTransition,field_label.getText()));
-               clickedTransition.setBehavior(generateBehavior(automatic,informed,guardValue,enablewhentrue));
+               clickedTransition.generateBehavior(automatic,informed,guardValue,enablewhentrue);
                clickedTransition.setAutomatic(automatic);
                clickedTransition.setInformed(informed);
                clickedTransition.setEnableWhenTrue(enablewhentrue);
@@ -137,49 +137,4 @@ public class SetBehaviorAction extends AbstractAction{
             }
          }
     }
-
-    /**
-     * Generates behavior based on the selected configuration.
-     * @param automatic value that determines if the transition is automatic.
-     * @param informed value that determines if the transition is informed.
-     * @param guardValue Name of the guard.
-     * @param enablewhentrue Initial State of the guard.
-     * @return behavior returns the behavior with the compatible format. The syntax is the following:
-     * &lt;automatic,informed,(~guard_name)&gt;
-     * where:
-     * automatic can be A for the automatic transition or F for fired transition.
-     * informed can be I for the informed transition or N for non-informed transition.
-     * guard is the name of the guard associated on this transition.
-     * Guards can be shared by any amount of transitions and can be negated using ! or ~ token before the guard name.
-     * The default values are:
-     * automatic: F 
-     * informed: I
-     * guard: none
-     * initialState: false
-     */
-    public String generateBehavior(boolean automatic, boolean informed, String guardValue, boolean enablewhentrue) {
-		String behavior;
-		String statusAutomatic;
-		String statusInformed;
-		String statusEnablewhentrue;
-		if (automatic) {
-			statusAutomatic = "A";
-		} else {
-			statusAutomatic = "F";
-		}
-
-		if (informed) {
-			statusInformed = "I";
-		} else {
-			statusInformed = "N";
-		}
-
-		if (enablewhentrue) {
-			statusEnablewhentrue = "";
-		} else {
-			statusEnablewhentrue = "!";
-		}
-		behavior = "<" + statusAutomatic + "," + statusInformed + "," + "(" + statusEnablewhentrue + guardValue + ")" + ">";
-		return behavior;
-	}
 }

@@ -73,6 +73,20 @@
                     <offset x="4" y="31"/>
                 </graphics>
             </name>
+
+            <xsl:if test="timed='true'">
+                <delay>
+                    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+                        <cn>
+                            <xsl:value-of select="rate"></xsl:value-of>
+                        </cn>
+                        <cn>
+                            <xsl:value-of select="rate"></xsl:value-of>
+                        </cn>
+                    </interval>
+                </delay>
+            </xsl:if>
+
             <label>
             	<text>
             		<xsl:value-of select="behavior"></xsl:value-of></text>
