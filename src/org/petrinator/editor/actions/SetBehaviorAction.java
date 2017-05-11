@@ -22,7 +22,7 @@ public class SetBehaviorAction extends AbstractAction{
 
     public SetBehaviorAction(Root root) {
         this.root = root;
-        String name = "Set behavior";
+        String name = "Properties";
         putValue(NAME, name);
         putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/Behavior16.gif"));
         putValue(SHORT_DESCRIPTION, name);

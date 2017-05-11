@@ -14,9 +14,9 @@ public class BehaviorAction extends AbstractAction {
 
     public BehaviorAction(Root root) {
         this.root = root;
-        String name = "Behavior of transition";
+        String name = "Behavior";
         putValue(NAME, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/label.gif"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/Preferences16.gif"));
         putValue(SHORT_DESCRIPTION, name);
         setEnabled(true);
     }

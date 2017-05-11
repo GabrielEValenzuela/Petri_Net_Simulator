@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaquín Rodríguez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquï¿½n Rodrï¿½guez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ public class SetArcInhibitoryAction extends AbstractAction {
         this.root = root;
         String name = "Set/unset inhibitor arc type";
         putValue(NAME, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/converttransitiontosubnet.gif"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/inibithor.png"));
         putValue(SHORT_DESCRIPTION, name);
         putValue(MNEMONIC_KEY, KeyEvent.VK_I);
         setEnabled(false);

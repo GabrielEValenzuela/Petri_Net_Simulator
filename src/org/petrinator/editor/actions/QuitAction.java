@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaquín Rodríguez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquï¿½n Rodrï¿½guez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import org.petrinator.editor.Root;
+import org.petrinator.util.GraphicsTools;
 
 /**
  *
@@ -37,6 +38,7 @@ public class QuitAction extends AbstractAction {
         String name = "Quit";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/quit.png"));
         putValue(MNEMONIC_KEY, KeyEvent.VK_Q);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl Q"));
     }
