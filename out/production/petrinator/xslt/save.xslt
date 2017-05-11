@@ -49,6 +49,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <x><xsl:value-of select="x"/></x>
                 <y><xsl:value-of select="y"/></y>
                 <label><xsl:value-of select="label"/></label>
+                <timed><xsl:value-of select="timed"/></timed>
+                <rate><xsl:value-of select="rate"/></rate>
+                <automatic><xsl:value-of select="automatic"/></automatic>
+                <informed><xsl:value-of select="informed"/></informed>
+                <enableWhenTrue><xsl:value-of select="enableWhenTrue"/></enableWhenTrue>
+                <guard><xsl:value-of select="guard"/></guard>
             </transition>
         </xsl:for-each>
         <xsl:for-each select="arc">

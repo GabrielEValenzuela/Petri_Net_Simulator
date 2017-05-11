@@ -5,7 +5,7 @@
 
 <xsl:template match="/document">
 <pnml>
-    <net id="n-2238-D385B-0" type="http://www.pnml.org/version-2009/grammar/ptnet">
+    <net id="n-2238-D385B-0" type="Petrinator TinaDialect">
         <page id='g-2A34-1546E-1'>
         	<xsl:call-template name="subnet"><!-- use this to translate all elements to positive coordinates: --><xsl:with-param
         			name="x">
@@ -73,6 +73,20 @@
                     <offset x="4" y="31"/>
                 </graphics>
             </name>
+
+            <xsl:if test="timed='true'">
+                <delay>
+                    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+                        <cn>
+                            <xsl:value-of select="rate"></xsl:value-of>
+                        </cn>
+                        <cn>
+                            <xsl:value-of select="rate"></xsl:value-of>
+                        </cn>
+                    </interval>
+                </delay>
+            </xsl:if>
+
             <label>
             	<text>
             		<xsl:value-of select="behavior"></xsl:value-of></text>

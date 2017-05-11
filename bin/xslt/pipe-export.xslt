@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="/document">
 <pnml>
-    <net type="VIPschema.xsd">
+    <net type=" Petrinator PipeDialect">
         <xsl:call-template name="subnet">
             <!-- use this to translate all elements to positive coordinates: -->
             <xsl:with-param name="x"><xsl:value-of select="-left"/></xsl:with-param>
@@ -63,9 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
                 <graphics>
                     <offset x="5" y="33"/>
-                    <fill color="rgb(255, 255, 255)"/>
-                    <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                    <font family="SansSerif" orientation="0" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -76,9 +73,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
                     <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                 </position>
-                <dimension x="32" y="32"/>
-                <fill color="rgb(255, 255, 255)"/>
-                <line color="rgb(0, 0, 0)" shape="curve" style="solid" width="1"/>
             </graphics>
         </place>
     </xsl:for-each>
@@ -91,9 +85,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
                 <graphics>
                     <offset x="4" y="31"/>
-                    <fill color="rgb(255, 255, 255)"/>
-                    <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                    <font family="SansSerif" orientation="0" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
                 </graphics>
             </name>
             <graphics>
@@ -101,10 +92,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
                     <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                 </position>
-                <dimension x="32" y="32"/>
-                <fill color="rgb(255, 255, 255)"/>
-                <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
             </graphics>
+            <rate>
+                <value>
+                    <xsl:value-of select="rate"></xsl:value-of>
+                </value>
+            </rate>
+            <timed>
+                <value>
+                    <xsl:value-of select="timed"></xsl:value-of>
+                </value>
+            </timed>
+
         </transition>
     </xsl:for-each>
     <xsl:for-each select="arc"><arc provider="petrinet.provider.weightededge">
