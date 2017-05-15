@@ -391,21 +391,23 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         delete.setEnabled(isDeletable);
         setArcMultiplicity.setEnabled(isArc);
         setArcInhibitory.setEnabled(isPtoT);
-        setArcReset.setEnabled(isPtoT);
+        //setArcReset.setEnabled(isPtoT);
+        setArcReset.setEnabled(false);
         setTokens.setEnabled(isPlaceNode);
         setLabel.setEnabled(isPlaceNode || isTransitionNode);
         setBehavior.setEnabled(isPlaceNode || isTransitionNode);
         addSelectedTransitionsToSelectedRoles.setEnabled((isTransitionNode || areTransitionNodes) && roleSelected);
         removeSelectedTransitionsFromSelectedRoles.setEnabled((isTransitionNode || areTransitionNodes) && roleSelected);
-        convertTransitionToSubnet.setEnabled(isTransition || areTransitions || isSubnet || areSubnets);
+        //convertTransitionToSubnet.setEnabled(isTransition || areTransitions || isSubnet || areSubnets);
+        convertTransitionToSubnet.setEnabled(false);
         replaceSubnet.setEnabled(isSubnet || areSubnets);
         saveSubnetAs.setEnabled(isSubnet);
         openSubnet.setEnabled(isSubnet);
         closeSubnet.setEnabled(isParent);
         undo.setEnabled(getUndoManager().isUndoable());
         redo.setEnabled(getUndoManager().isRedoable());
-        setPlaceStatic.setEnabled(isPlaceNode);
-        //matrixAction.setEnabled(isEmpty);
+        //setPlaceStatic.setEnabled(isPlaceNode);
+        setPlaceStatic.setEnabled(false);
         
     }
 
@@ -691,7 +693,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
 
         transitionPopup = new JPopupMenu();
         transitionPopup.add(setLabel);
-        transitionPopup.add(setBehavior);
+        transitionPopup.addSeparator();
         transitionPopup.add(convertTransitionToSubnet);
         transitionPopup.add(addSelectedTransitionsToSelectedRoles);
         transitionPopup.add(removeSelectedTransitionsFromSelectedRoles);
@@ -699,6 +701,8 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         transitionPopup.add(cutAction);
         transitionPopup.add(copyAction);
         transitionPopup.add(delete);
+        transitionPopup.addSeparator();
+        transitionPopup.add(setBehavior);
 
         Font boldFont = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 

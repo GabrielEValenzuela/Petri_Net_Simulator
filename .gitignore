@@ -11,3 +11,5 @@
 !*.xslt
 !*.xcf
 !.gitignore
+!*.html
+!*.xsl

@@ -41,7 +41,7 @@ public class InvariantAction extends AbstractAction
         String name = "Invariant analysis";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/invariant16.png"));
     }
 
     public void actionPerformed(ActionEvent e)

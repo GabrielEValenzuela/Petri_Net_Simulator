@@ -42,7 +42,7 @@ public class SiphonsAction extends AbstractAction
         String name = "Siphons and traps";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/siphons16.png"));
     }
 
     public void actionPerformed(ActionEvent e) {

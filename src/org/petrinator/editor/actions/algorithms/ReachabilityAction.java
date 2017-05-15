@@ -62,7 +62,7 @@ public class ReachabilityAction extends AbstractAction
         String name = "Reachabilty/Coverability graph";
         putValue(NAME, name);
         putValue(SHORT_DESCRIPTION, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/play16.png"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/graph16.png"));
     }
 
     public void actionPerformed(ActionEvent e)

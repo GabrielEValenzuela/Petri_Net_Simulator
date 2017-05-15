@@ -129,7 +129,7 @@ public class SimulateAction extends AbstractAction
         time.setText("1000");
         number.setText("10");
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel, "Simulation time", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(root.getParentFrame(), myPanel, "Simulation time", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, GraphicsTools.getIcon("pneditor/play32.png"));
         if (result == JOptionPane.OK_OPTION)
         {
             try

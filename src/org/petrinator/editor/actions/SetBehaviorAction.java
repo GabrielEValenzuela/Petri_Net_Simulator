@@ -59,10 +59,12 @@ public class SetBehaviorAction extends AbstractAction{
 			myPanel.add(new JLabel(""), "wrap");
 			myPanel.add(new JLabel("Automatic:"));
 			myPanel.add(checkBoxAutomatic);
+			myPanel.add(new JLabel(""));
 			myPanel.add(new JLabel("Informed:"));
-			myPanel.add(checkBoxInformed, "wrap");
+			myPanel.add(checkBoxInformed, "al right, wrap");
 			myPanel.add(new JLabel("Timed:"));
 			myPanel.add(checkBoxTimed);
+			myPanel.add(new JLabel(""));
 			myPanel.add(new JLabel("Rate:  "));
 			myPanel.add(field_rate, "wrap");
 			myPanel.add(new JLabel(""), "wrap");
@@ -72,6 +74,7 @@ public class SetBehaviorAction extends AbstractAction{
 			myPanel.add(new JLabel(""), "wrap");
 			myPanel.add(new JLabel("Enable when true:"));
 			myPanel.add(checkBoxEnablewhentrue);
+			myPanel.add(new JLabel("    "));
 			myPanel.add(new JLabel("Guard:  "));
 			myPanel.add(field_guard, "wrap");
 
@@ -83,6 +86,7 @@ public class SetBehaviorAction extends AbstractAction{
 			checkBoxInformed.setSelected(clickedTransition.isInformed());
 			checkBoxEnablewhentrue.setSelected(clickedTransition.isEnablewhentrue());
 			checkBoxTimed.setSelected(clickedTransition.isTimed());
+			checkBoxInformed.setEnabled(false);
 
 			if(clickedTransition.isTimed())
 			{
@@ -110,7 +114,7 @@ public class SetBehaviorAction extends AbstractAction{
 			});
 
             int result = JOptionPane.showConfirmDialog(root.getParentFrame(), myPanel,
-                    "Transition properties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    "Transition properties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, GraphicsTools.getIcon("pneditor/Behavior32.png"));
             if (result == JOptionPane.OK_OPTION)
             {
                guardValue = field_guard.getText();

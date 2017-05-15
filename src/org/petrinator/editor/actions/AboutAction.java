@@ -18,12 +18,18 @@
  */
 package org.petrinator.editor.actions;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import javax.swing.*;
 
 import org.petrinator.util.GraphicsTools;
 import org.petrinator.editor.Root;
+import pipe.gui.widgets.ButtonBar;
+import pipe.gui.widgets.EscapableDialog;
+import org.petrinator.auxiliar.ResultsHTMLPane;
 
 /**
  *
@@ -43,6 +49,28 @@ public class AboutAction extends AbstractAction {
 
     public void actionPerformed(ActionEvent e)
     {
+
+        EscapableDialog guiDialog = new EscapableDialog(root.getParentFrame(), "About", false);
+        Container contentPane = guiDialog.getContentPane();
+        ResultsHTMLPane results = new ResultsHTMLPane("");
+        contentPane.add(results);
+        guiDialog.pack();
+        guiDialog.setLocationRelativeTo(root.getParentFrame());
+        guiDialog.setVisible(true);
+
+        Scanner scanner = null;
+        try
+        {
+            scanner = new Scanner(new File("src/resources/about.html"), "UTF-8");
+        } catch (FileNotFoundException e1)
+        {
+            e1.printStackTrace();
+        }
+        String s = scanner.useDelimiter("\\Z").next();
+        scanner.close();
+        results.setText(s);
+
+        /*
         JOptionPane.showOptionDialog(
                 root.getParentFrame(),  "                                                      " + "Universidad Nacional de Cordoba, Argentina\n" +
                 root.getAppLongName() + "\n" 
@@ -51,12 +79,9 @@ public class AboutAction extends AbstractAction {
                 + "Contributors:\n"
                 + "Martin Riesz (PNEditor)\n"
                 + "Ján Tančibok (inhibitor arcs)\n"
-                + "Maxim Gready (Classification) \n"
-                + "James Bloom (Classification) \n"
+                + "Maxim Gready, James Bloom (Classification) \n"
                 + "Nadeem Akharware (Invariants) \n"
-                + "Matthew Worthington (Reachability) \n"
-                + "Edwin Chung (Reachability) \n"
-                + "Will Master (Reachability) \n"
+                + "Matthew Worthington, Edwin Chung, Will Master (Reachability) \n"
                 + "Pere Bonet (Siphons) \n"
                 + "\n"
                 + "This program is free software:  you can redistribute it and/or modify          \n"
@@ -75,6 +100,7 @@ public class AboutAction extends AbstractAction {
                 GraphicsTools.getIcon("icon48.png"),
                 new String[]{"OK"},
                 "OK");
+                */
     }
 
 }

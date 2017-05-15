@@ -32,7 +32,7 @@ public class GraphFrame extends JFrame
         this.setIconImage(root.getParentFrame().getIconImage());
         this.setLocationRelativeTo(root.getParentFrame());
         setSize(800, 600);
-        setLocation(100, 100);
+        setLocation(600, 300);
 
         addWindowListener(new WindowAdapter()
         {
