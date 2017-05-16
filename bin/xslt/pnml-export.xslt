@@ -98,6 +98,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <font family="SansSerif" orientation="0" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
                 </graphics>
             </name>
+            <timed><xsl:value-of select="timed"/></timed>
+            <rate><xsl:value-of select="rate"/></rate>
+            <automatic><xsl:value-of select="automatic"/></automatic>
+            <informed><xsl:value-of select="informed"/></informed>
+            <enableWhenTrue><xsl:value-of select="enableWhenTrue"/></enableWhenTrue>
+            <guard><xsl:value-of select="guard"/></guard>
             <graphics>
                 <position>
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>

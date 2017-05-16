@@ -25,27 +25,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <y>0</y>
         <xsl:for-each select="pnml/net/place">
             <place>
-                <id><xsl:value-of select="@id"/></id>
-                <x><xsl:value-of select="graphics/position/@x"/></x>
-                <y><xsl:value-of select="graphics/position/@y"/></y>
+                <id><xsl:value-of select="name/value"/></id>
+                <x><xsl:value-of select="floor(graphics/position/@x)"/></x>
+                <y><xsl:value-of select="floor(graphics/position/@y)"/></y>
                 <label><xsl:value-of select="name/value"/></label>
-                <tokens><xsl:value-of select="initialMarking/token/value"/><xsl:value-of select="initialMarking/value"/></tokens>
+
+                <xsl:variable name="tokens"><xsl:value-of select="substring(initialMarking/value,1,8)"/></xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$tokens = 'Default,'">
+                        <tokens> <xsl:value-of select="substring(initialMarking/value,9,3)"/></tokens>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <tokens> <xsl:value-of select="initialMarking/value"/></tokens>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!--
+                <tokens> <xsl:value-of select="substring(initialMarking/value,9,3)"/></tokens>
+                -->
                 <isStatic>false</isStatic>
             </place>
         </xsl:for-each>
         <xsl:for-each select="pnml/net/transition">
             <transition>
                 <id><xsl:value-of select="@id"/></id>
-                <x><xsl:value-of select="graphics/position/@x"/></x>
-                <y><xsl:value-of select="graphics/position/@y"/></y>
+                <x><xsl:value-of select="floor(graphics/position/@x)"/></x>
+                <y><xsl:value-of select="floor(graphics/position/@y)"/></y>
                 <label><xsl:value-of select="name/value"/></label>
+                <timed><xsl:value-of select="timed"/></timed>
+                <rate><xsl:value-of select="rate"/></rate>
             </transition>
         </xsl:for-each>
         <xsl:for-each select="pnml/net/arc">
             <arc>
-                <type><xsl:value-of select="type"/></type>
+                <xsl:variable name="typeArc"><xsl:value-of select="type"/></xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$typeArc = 'normal'">
+                        <type>regular</type>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <type><xsl:value-of select="type"/></type>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <sourceId><xsl:value-of select="@source"/></sourceId>
                 <destinationId><xsl:value-of select="@target"/></destinationId>
+                <multiplicity><xsl:value-of select="substring(inscription/value,9,1)"/></multiplicity>
+                <!--
                 <multiplicity>
                     <xsl:choose>
                         <xsl:when test="inscription/value &gt; 0">
@@ -61,7 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <x><xsl:value-of select="@x"/></x>
                         <y><xsl:value-of select="@y"/></y>
                     </breakPoint>
-                </xsl:for-each>
+                </xsl:for-each>-->
             </arc>
         </xsl:for-each>
     </subnet>

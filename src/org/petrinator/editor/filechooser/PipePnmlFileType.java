@@ -26,7 +26,7 @@ public class PipePnmlFileType extends FileType {
 
     @Override
     public String getExtension() {
-        return "pnml";
+        return "xml";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class PipePnmlFileType extends FileType {
     @Override
     public Document load(File file) throws FileTypeException {
         try {
-            final InputStream xslt = getClass().getResourceAsStream("/xslt/pnml-import.xslt");
+            final InputStream xslt = getClass().getResourceAsStream("/xslt/pipe-import.xslt");
             Document document = new DocumentImporter().readFromFileWithXslt(file, xslt);
             document.petriNet.getRootSubnet().setViewTranslationToCenterRecursively();
             return document;

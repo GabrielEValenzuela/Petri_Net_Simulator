@@ -56,7 +56,8 @@ public class Arc extends ArcEdge implements Cloneable {
         this.multiplicity = multiplicity;
     }
 
-    public void setType(String type) {
+    public void setType(String type)
+    {
         this.type = type;
     }
 
