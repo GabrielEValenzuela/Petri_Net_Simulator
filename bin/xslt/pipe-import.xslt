@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
+Copyright (C) 2017 Leandro Asson leoasson at gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,16 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:template match="/">
 
-<document>
-    <subnet>
-        <id>0</id>
-        <x>0</x>
-        <y>0</y>
+    <xsl:output method="xml" omit-xml-declaration="no" indent="yes"/>
+
+    <xsl:template match="/">
+        <document>
+            <subnet>
+                <id>0</id>
+                <x>0</x>
+                <y>0</y>
+                <xsl:call-template name="subnet"/>
+            </subnet>
+        </document>
+    </xsl:template>
+
+    <xsl:template name="subnet">
         <xsl:for-each select="pnml/net/place">
             <place>
-                <id><xsl:value-of select="name/value"/></id>
+                <id><xsl:value-of select="@id"/></id>
                 <x><xsl:value-of select="floor(graphics/position/@x)"/></x>
                 <y><xsl:value-of select="floor(graphics/position/@y)"/></y>
                 <label><xsl:value-of select="name/value"/></label>
@@ -33,18 +41,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="tokens"><xsl:value-of select="substring(initialMarking/value,1,8)"/></xsl:variable>
                 <xsl:choose>
                     <xsl:when test="$tokens = 'Default,'">
-                        <tokens> <xsl:value-of select="substring(initialMarking/value,9,3)"/></tokens>
+                        <tokens> <xsl:value-of select="substring(initialMarking/value,9,string-length((initialMarking/value))-8)"/></tokens>
                     </xsl:when>
                     <xsl:otherwise>
                         <tokens> <xsl:value-of select="initialMarking/value"/></tokens>
                     </xsl:otherwise>
                 </xsl:choose>
-                <!--
-                <tokens> <xsl:value-of select="substring(initialMarking/value,9,3)"/></tokens>
-                -->
                 <isStatic>false</isStatic>
             </place>
         </xsl:for-each>
+
         <xsl:for-each select="pnml/net/transition">
             <transition>
                 <id><xsl:value-of select="@id"/></id>
@@ -53,43 +59,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label><xsl:value-of select="name/value"/></label>
                 <timed><xsl:value-of select="timed"/></timed>
                 <rate><xsl:value-of select="rate"/></rate>
+                <automatic>false</automatic>
+                <informed>true</informed>
+                <enableWhenTrue>false</enableWhenTrue>
+                <guard>none</guard>
             </transition>
         </xsl:for-each>
+
         <xsl:for-each select="pnml/net/arc">
             <arc>
-                <xsl:variable name="typeArc"><xsl:value-of select="type"/></xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="$typeArc = 'normal'">
-                        <type>regular</type>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <type><xsl:value-of select="type"/></type>
-                    </xsl:otherwise>
-                </xsl:choose>
                 <sourceId><xsl:value-of select="@source"/></sourceId>
                 <destinationId><xsl:value-of select="@target"/></destinationId>
-                <multiplicity><xsl:value-of select="substring(inscription/value,9,1)"/></multiplicity>
-                <!--
-                <multiplicity>
-                    <xsl:choose>
-                        <xsl:when test="inscription/value &gt; 0">
-                            <xsl:value-of select="inscription/value"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            1
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </multiplicity>
-                <xsl:for-each select="graphics/position">
-                    <breakPoint>
-                        <x><xsl:value-of select="@x"/></x>
-                        <y><xsl:value-of select="@y"/></y>
-                    </breakPoint>
-                </xsl:for-each>-->
-            </arc>
-        </xsl:for-each>
-    </subnet>
-</document>
 
-</xsl:template>
-</xsl:transform>
+                <xsl:variable name="Multiplicity"><xsl:value-of select="substring(inscription/value,1,8)"/></xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$Multiplicity = 'Default,'">
+                        <multiplicity> <xsl:value-of select="substring(inscription/value,9,string-length((inscription/value))-8)"/></multiplicity>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <multiplicity> <xsl:value-of select="inscription/value"/></multiplicity>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:variable name="isExported"><xsl:value-of select="exported"/></xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$isExported = 'true'">
+                        <xsl:for-each select="breakPoint">
+                            <breakPoint>
+                                <x><xsl:value-of select="@x"/></x>
+                                <y><xsl:value-of select="@y"/></y>
+                            </breakPoint>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:for-each select="arcpath">
+                            <xsl:if test="position()!= 1 and position() != last()">
+                                <breakPoint>
+                                    <x><xsl:value-of select="@x"/></x>
+                                    <y><xsl:value-of select="@y"/></y>
+                                </breakPoint>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:otherwise>
+                </xsl:choose>
+                 <type><xsl:value-of select="type/@value"/></type>
+             </arc>
+         </xsl:for-each>
+
+    </xsl:template>
+ </xsl:transform>

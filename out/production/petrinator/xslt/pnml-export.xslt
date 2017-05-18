@@ -139,6 +139,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </position>
                 </xsl:for-each>
             </graphics>
+            <type>
+                <xsl:value-of select="type"></xsl:value-of>
+            </type>
         </arc>
     </xsl:for-each>
     <xsl:for-each select="subnet">

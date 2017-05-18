@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
+Copyright (C) 2017 Leandro Asson leoasson at gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,134 +17,137 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="xml" omit-xml-declaration="no" indent="yes"/>
+    <xsl:output method="xml" omit-xml-declaration="no" indent="yes"/>
 
-<xsl:template match="/document">
-<pnml>
-    <net type=" Petrinator PipeDialect">
-        <xsl:call-template name="subnet">
-            <!-- use this to translate all elements to positive coordinates: -->
-            <xsl:with-param name="x"><xsl:value-of select="-left"/></xsl:with-param>
-            <xsl:with-param name="y"><xsl:value-of select="-top"/></xsl:with-param>
-            <!--instead of following 2 lines: -->
-            <!-- <xsl:with-param name="x">0</xsl:with-param>
-            <xsl:with-param name="y">0</xsl:with-param>-->
-            <xsl:with-param name="label"></xsl:with-param>
-        </xsl:call-template>
-    </net>
-</pnml>
-</xsl:template>
+    <xsl:template match="/document">
+        <pnml>
+            <net id="Net-One" type="P/T net">
 
-<xsl:template name="label">
-    <xsl:param name="subnetlabel"/>
-    <xsl:choose>
-        <xsl:when test="not(string(label))">
-            <value>&#160;</value> <!-- empty label -->
-        </xsl:when>
-        <xsl:when test="not(string($subnetlabel))">
-            <value><xsl:value-of select="label"/></value>
-        </xsl:when>
-        <xsl:otherwise>
-            <value><xsl:value-of select="concat($subnetlabel,'.',label)"/></value>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+                <token id="Default" enabled="true" red="0" green="0" blue="0"/>
+                <xsl:call-template name="net">
 
-<xsl:template name="subnet">
-    <xsl:param name="x"/>
-    <xsl:param name="y"/>
-    <xsl:param name="label"/>
-    <xsl:for-each select="place">
-        <place provider="petrinet.provider.place">
-            <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
-            <name>
-                <xsl:call-template name="label">
-                    <xsl:with-param name="subnetlabel"><xsl:value-of select="$label"/></xsl:with-param>
+                    <xsl:with-param name="x"><xsl:value-of select="-left"/></xsl:with-param>
+                    <xsl:with-param name="y"><xsl:value-of select="-top"/></xsl:with-param>
+
                 </xsl:call-template>
-                <graphics>
-                    <offset x="5" y="33"/>
-                </graphics>
-            </name>
-            <initialMarking>
-                <value>
-                	<xsl:value-of select="tokens"></xsl:value-of></value></initialMarking>
-            <graphics>
-                <position>
-                    <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
-                    <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
-                </position>
-            </graphics>
-        </place>
-    </xsl:for-each>
-    <xsl:for-each select="transition">
-        <transition provider="petrinet.provider.transition">
-            <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
-            <name>
-                <xsl:call-template name="label">
-                    <xsl:with-param name="subnetlabel"><xsl:value-of select="$label"/></xsl:with-param>
-                </xsl:call-template>
-                <graphics>
-                    <offset x="4" y="31"/>
-                </graphics>
-            </name>
-            <graphics>
-                <position>
-                    <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
-                    <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
-                </position>
-            </graphics>
-            <rate>
-                <value>
-                    <xsl:value-of select="rate"></xsl:value-of>
-                </value>
-            </rate>
-            <timed>
-                <value>
-                    <xsl:value-of select="timed"></xsl:value-of>
-                </value>
-            </timed>
+            </net>
+        </pnml>
+    </xsl:template>
 
-        </transition>
-    </xsl:for-each>
-    <xsl:for-each select="arc"><arc provider="petrinet.provider.weightededge">
-            <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
-            <xsl:attribute name="source"><xsl:value-of select="realSourceId"/></xsl:attribute>
-            <xsl:attribute name="target"><xsl:value-of select="realDestinationId"/></xsl:attribute>
-            <inscription>
-                <value><xsl:value-of select="multiplicity"/></value>
+    <xsl:template name="net">
+
+        <xsl:param name="x"/>
+        <xsl:param name="y"/>
+
+        <xsl:for-each select="place">
+            <place>
+                <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
                 <graphics>
-                    <anchor distance="30.0" segment="0"/>
-                    <offset x="4" y="-7"/>
-                    <fill color="rgb(255, 255, 255)"/>
-                    <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                    <font family="SansSerif" orientation="1" posture="0.0" rotation="0.0" size="10.0" weight="1.0"/>
-                </graphics>
-            </inscription>
-            <graphics>
-                <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
-                <xsl:for-each select="breakPoint">
                     <position>
                         <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
                         <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
                     </position>
-                </xsl:for-each>
-            </graphics>
-            <type>
-            	<xsl:attribute name="value">
-            		<xsl:value-of select="type"></xsl:value-of></xsl:attribute></type>
-            </arc>
-    </xsl:for-each>
-    <xsl:for-each select="subnet">
-        <xsl:call-template name="subnet">
-            <xsl:with-param name="x"><xsl:value-of select="x+$x"/></xsl:with-param>
-            <xsl:with-param name="y"><xsl:value-of select="y+$y"/></xsl:with-param>
-            <xsl:with-param name="label">
-                <xsl:value-of select="$label"/>
-                <xsl:if test="string(label) and string($label)">.</xsl:if>
-                <xsl:value-of select="label"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:for-each>
-</xsl:template>
+                </graphics>
+                <name>
+                    <value><xsl:value-of select="label"/></value>
+                    <graphics>
+                        <offset x="5" y="33"/>
+                    </graphics>
+                </name>
+                <xsl:variable name="tokens"><xsl:value-of select="concat('Default,',tokens)"/></xsl:variable>
+                <initialMarking>
+                    <value>
+                        <xsl:value-of select="$tokens"></xsl:value-of>
+                    </value>
+                </initialMarking>
+                <capacity>
+                    <xsl:variable name="capacity" select="'0'"/>
+                    <value>
+                        <xsl:value-of select="$capacity"></xsl:value-of>
+                    </value>
+                </capacity>
+            </place>
+        </xsl:for-each>
 
+        <xsl:for-each select="transition">
+            <transition>
+                <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
+                <graphics>
+                    <position>
+                        <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
+                        <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
+                    </position>
+                </graphics>
+                <name>
+                    <value><xsl:value-of select="label"/></value>
+                    <graphics>
+                        <offset x="5" y="33"/>
+                    </graphics>
+                </name>
+                <orientation>
+                    <xsl:variable name="orientation" select="'270'"/>
+                    <value>
+                        <xsl:value-of select="$orientation"></xsl:value-of>
+                    </value>
+                </orientation>
+                <rate>
+                    <value>
+                        <xsl:value-of select="rate"></xsl:value-of>
+                    </value>
+                </rate>
+                <timed>
+                    <value>
+                        <xsl:value-of select="timed"></xsl:value-of>
+                    </value>
+                </timed>
+                <infiniteServer>
+                    <xsl:variable name="infiniteServer" select="'false'"/>
+                    <value>
+                        <xsl:value-of select="$infiniteServer"></xsl:value-of>
+                    </value>
+                </infiniteServer>
+                <priority>
+                    <xsl:variable name="priority" select="'1'"/>
+                    <value>
+                        <xsl:value-of select="$priority"></xsl:value-of>
+                    </value>
+                </priority>
+            </transition>
+        </xsl:for-each>
+
+        <xsl:for-each select="arc">
+            <arc>
+                <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
+                <xsl:attribute name="source"><xsl:value-of select="sourceId"/></xsl:attribute>
+                <xsl:attribute name="target"><xsl:value-of select="destinationId"/></xsl:attribute>
+
+                <xsl:variable name="multiplicity"><xsl:value-of select="concat('Default,',multiplicity)"/></xsl:variable>
+                <inscription>
+                    <value><xsl:value-of select="$multiplicity"/></value>
+                    <graphics/>
+                </inscription>
+                <type>
+                    <xsl:attribute name="value"><xsl:value-of select="type"></xsl:value-of></xsl:attribute>
+                </type>
+                <exported>
+                    <xsl:variable name="value" select="'true'"/>
+                    <xsl:value-of select="$value"></xsl:value-of>
+                </exported>
+                <xsl:for-each select="breakPoint">
+                    <breakPoint>
+                        <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>
+                        <xsl:attribute name="y"><xsl:value-of select="y+$y"/></xsl:attribute>
+                    </breakPoint>
+                </xsl:for-each>
+            </arc>
+        </xsl:for-each>
+
+        <xsl:for-each select="subnet">
+                <xsl:call-template name="net">
+                    <xsl:with-param name="x"><xsl:value-of select="x+$x"/></xsl:with-param>
+                    <xsl:with-param name="y"><xsl:value-of select="y+$y"/></xsl:with-param>
+                </xsl:call-template>
+        </xsl:for-each>
+
+    </xsl:template>
 </xsl:transform>
