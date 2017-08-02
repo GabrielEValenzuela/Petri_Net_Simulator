@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
         <xsl:for-each select="pnml/net/arc">
             <arc>
+                <type><xsl:value-of select="type"/></type>
                 <sourceId><xsl:value-of select="@source"/></sourceId>
                 <destinationId><xsl:value-of select="@target"/></destinationId>
                 <multiplicity>

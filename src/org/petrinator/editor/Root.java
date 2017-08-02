@@ -482,6 +482,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         List<FileType> openSaveFiletypes = new LinkedList<FileType>();
         openSaveFiletypes.add(new PflowFileType());
         List<FileType> importFiletypes = new LinkedList<FileType>();
+        importFiletypes.add(new PipePnmlFileType());
         importFiletypes.add(new ViptoolPnmlFileType());
         List<FileType> exportFiletypes = new LinkedList<FileType>();
         exportFiletypes.add(new PipePnmlFileType());
