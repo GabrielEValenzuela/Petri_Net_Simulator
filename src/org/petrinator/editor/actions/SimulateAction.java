@@ -210,12 +210,16 @@ public class SimulateAction extends AbstractAction
         List<Thread> threads = new ArrayList<Thread>();
         for(int i = 0; i < petri.getTransitions().length; i++)
         {
-            Thread t = createThread(monitor, petri.getTransitions()[i].getName());
-            threads.add(t);
-            t.start();
+            if(!(root.getDocument().petriNet.getRootSubnet().getTransition(petri.getTransitions()[i].getId()).isAutomatic()))
+            {
+                Thread t = createThread(monitor, petri.getTransitions()[i].getName());
+                threads.add(t);
+                t.start();
+            }
         }
 
-        System.out.println("Started firing");
+        System.out.println("Simulation");
+        System.out.println(" > Started firing");
 
         ProgressBarDialog dialog = new ProgressBarDialog(root, "Simulating...");
         dialog.show(true);
@@ -243,18 +247,19 @@ public class SimulateAction extends AbstractAction
                 // System.out.println(""); // Need at least one instruction in while, otherwise it will explode
                 if(checkAllAre(petri.getEnabledTransitions(),false))   // We need to check if the net is blocked and no more transitions can be fored
                 {
-                    JOptionPane.showMessageDialog(null, "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
+                    JOptionPane.showMessageDialog(root.getParentFrame(), "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
                     break;
                 }
                 else if(blockedMonitor(threads))
                 {
-                    System.out.println("Monitor blocked");
+                    JOptionPane.showMessageDialog(root.getParentFrame(), " \n The net is blocked. Make sure that at least one \n fired transition comes before the automatic ones.      \n ");
+                    System.out.println(" > Monitor blocked");
                     break;
                 }
             }
         }
 
-        System.out.println("Started simulation");
+        System.out.println(" > Simulation started");
         dialog.show(false);
 
          /*
@@ -274,7 +279,7 @@ public class SimulateAction extends AbstractAction
          * We fire the net graphically
          */
         fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
-        System.out.println("Simulation ended");
+        System.out.println(" > Simulation ended");
         setEnabled(true);
     }
 
@@ -333,7 +338,7 @@ public class SimulateAction extends AbstractAction
                 stop = false;
                 setEnabled(true);
                 list.clear();
-                System.out.println("Simulation stopped");
+                System.out.println(" > Simulation stopped by user");
                 return;
             }
 
