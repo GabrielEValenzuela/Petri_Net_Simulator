@@ -18,7 +18,6 @@
  */
 package org.petrinator.editor;
 
-import javax.swing.JList;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -35,11 +34,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.petrinator.auxiliar.EventList;
-import org.petrinator.editor.DrawingBoard;
-import org.petrinator.editor.LocalClipboard;
-import org.petrinator.editor.MainFrame;
-import org.petrinator.editor.PNEditor;
-import org.petrinator.editor.UndoManager;
 import org.petrinator.editor.actions.*;
 import org.petrinator.editor.actions.algorithms.*;
 import org.petrinator.editor.canvas.*;
@@ -582,6 +576,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         toolBar.addSeparator();
         toolBar.add(simulateNet);
         toolBar.add(new StopSimulationAction(this));
+        toolBar.addSeparator();
 
         /*
          * Top toolbar (File, Edit, Draw, etc...)

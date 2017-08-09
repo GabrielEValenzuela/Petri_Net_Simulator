@@ -199,13 +199,17 @@ public class DocumentImporter {
         transition.setId(xmlTransition.id);
         transition.setLabel(xmlTransition.label);
         transition.setCenter(xmlTransition.x, xmlTransition.y);
-        transition.setTime(xmlTransition.timed);
         transition.setRate(xmlTransition.rate);
         transition.setAutomatic(xmlTransition.automatic);
         transition.setInformed(xmlTransition.informed);
+        transition.setTime(xmlTransition.timed);
         transition.setEnableWhenTrue(xmlTransition.enableWhenTrue);
         transition.setGuard(xmlTransition.guard);
-        transition.generateBehavior(xmlTransition.automatic, xmlTransition.informed, xmlTransition.guard, xmlTransition.enableWhenTrue);
+
+        if(transition.isTimed())
+            transition.setAutomatic(true);
+        
+        transition.generateBehavior(transition.isAutomatic(), transition.isInformed(), transition.getGuard(), transition.isEnablewhentrue());
 
         return transition;
     }

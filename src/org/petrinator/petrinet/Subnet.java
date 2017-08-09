@@ -345,6 +345,17 @@ public class Subnet extends TransitionNode {
         return transitions;
     }
 
+    public boolean anyStochastic()
+    {
+        for(Element element : elements)
+        {
+            if(element instanceof TransitionNode && ((TransitionNode) element).isTimed())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Set<Subnet> getSubnetsRecursively() {
         Set<Subnet> subnets = new HashSet<Subnet>();

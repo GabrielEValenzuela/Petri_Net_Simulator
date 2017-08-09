@@ -16,11 +16,7 @@
  */
 package org.petrinator.editor.canvas;
 
-import java.awt.BasicStroke;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import org.petrinator.editor.PNEditor;
@@ -113,8 +109,15 @@ class TokenFeature implements Feature {
                     Transition transition = (Transition) element;
                     if (initialMarking.isEnabled(transition)) {
                         g.setColor(Colors.permittedColor);
-                    } else {
-                        g.setColor(Colors.disallowedColor);
+                    }
+                    else {
+                        //g.setColor(Colors.disallowedColor);
+                        g.setColor(Color.WHITE);
+                    }
+
+                    if(((Transition) element).isWaiting())
+                    {
+                        g.setColor(Color.BLUE);
                     }
                     ((Graphics2D) g).setStroke(new BasicStroke(2f));
                     g.drawRect(transition.getStart().x + 1, transition.getStart().y + 1, transition.getWidth() - 3, transition.getHeight() - 3);

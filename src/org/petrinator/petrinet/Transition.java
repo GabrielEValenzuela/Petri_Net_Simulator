@@ -31,6 +31,7 @@ import org.petrinator.util.GraphicsTools.VerticalAlignment;
 public class Transition extends TransitionNode implements Cloneable {
 
 	static boolean showBehavior = false;
+	private boolean waiting = false;
 	
     @Override
     public void draw(Graphics g, DrawingOptions drawingOptions)
@@ -64,6 +65,16 @@ public class Transition extends TransitionNode implements Cloneable {
     public void setShowBehavior(boolean s)
     {
     	showBehavior = s;
+    }
+
+    public void setWaiting(boolean b)
+    {
+        waiting = b;
+    }
+
+    public boolean isWaiting()
+    {
+        return waiting;
     }
     	
 }

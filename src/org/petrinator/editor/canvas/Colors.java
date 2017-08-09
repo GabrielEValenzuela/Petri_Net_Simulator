@@ -24,9 +24,11 @@ import java.awt.Color;
  */
 public class Colors {
 
-    public static final Color connectingColor = Color.green;
+    //public static final Color connectingColor = Color.green;
+    public static final Color connectingColor = new Color(0,153,0);
     public static final Color disallowedColor = Color.red;
-    public static final Color permittedColor = Color.green;
+    //public static final Color permittedColor = Color.green;
+    public static final Color permittedColor = new Color(0,153,0);
     public static final Color selectedColor = Color.lightGray;
     public static final Color singleSelectedColor = Color.gray;
     public static final Color pointingColor = Color.blue;

@@ -121,10 +121,14 @@ public class SimulateAction extends AbstractAction
         myPanel.add(new JLabel("Number of transitions:  "));
         myPanel.add(new JLabel ("    "));
         myPanel.add(number,"wrap");
-        myPanel.add(new JLabel("Time between transition:  "));
-        myPanel.add(new JLabel ("    "));
-        myPanel.add(time,"    ");
-        myPanel.add(new JLabel ("   ms"));
+
+        if(!root.getDocument().petriNet.getRootSubnet().anyStochastic())
+        {
+            myPanel.add(new JLabel("Time between transition:  "));
+            myPanel.add(new JLabel ("    "));
+            myPanel.add(time,"    ");
+            myPanel.add(new JLabel("ms"));
+        }
 
         time.setText("1000");
         number.setText("10");
@@ -191,6 +195,7 @@ public class SimulateAction extends AbstractAction
 
         TransitionsPolicy policy = new FirstInLinePolicy();
         PetriMonitor monitor = new PetriMonitor(petri, policy);
+        monitor.simulationRunning = true;
 
         petri.initializePetriNet();
 
@@ -250,7 +255,7 @@ public class SimulateAction extends AbstractAction
                     JOptionPane.showMessageDialog(root.getParentFrame(), "The net is blocked, " + ((ConcreteObserver) observer).getEvents().size() + " transitions were fired.");
                     break;
                 }
-                else if(blockedMonitor(threads))
+                else if(blockedMonitor(threads, petri))
                 {
                     JOptionPane.showMessageDialog(root.getParentFrame(), " \n The net is blocked. Make sure that at least one \n fired transition comes before the automatic ones.      \n ");
                     System.out.println(" > Monitor blocked");
@@ -259,6 +264,7 @@ public class SimulateAction extends AbstractAction
             }
         }
 
+        monitor.simulationRunning = false;
         System.out.println(" > Simulation started");
         dialog.show(false);
 
@@ -299,7 +305,7 @@ public class SimulateAction extends AbstractAction
                 {
                     try
                     {
-                        Thread.sleep((new Random()).nextInt(50));
+                        Thread.sleep(new Random().nextInt(50)); // Random value between 0 and 50 ms
                         m.fireTransition(id);
                     } catch (IllegalTransitionFiringError | IllegalArgumentException | PetriNetException e) {
                         e.printStackTrace();
@@ -354,6 +360,21 @@ public class SimulateAction extends AbstractAction
             //System.out.println(transition.getLabel() + " was fired!");
             root.getEventList().addEvent((transition.getLabel() + " was fired!"));
 
+            if(transition.isTimed())
+            {
+                //transition.setWaiting(true);
+                //root.repaintCanvas();
+
+                try
+                {
+                    Thread.currentThread().sleep((int) transition.getRate());
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+
+                //transition.setWaiting(false);
+            }
+
             FireTransitionCommand fire = new FireTransitionCommand(transition, marking);
             fire.execute();
             root.refreshAll();
@@ -369,11 +390,23 @@ public class SimulateAction extends AbstractAction
                 return;
             }
 
-            try
+            if(!root.getDocument().petriNet.getRootSubnet().anyStochastic())
             {
-                Thread.currentThread().sleep(timeBetweenTransitions);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try
+                {
+                    Thread.currentThread().sleep(timeBetweenTransitions);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else
+            {
+                try
+                {
+                    Thread.currentThread().sleep(50);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
@@ -394,11 +427,11 @@ public class SimulateAction extends AbstractAction
         return true;
     }
 
-    static boolean blockedMonitor(List<Thread> threads)
+    static boolean blockedMonitor(List<Thread> threads, RootPetriNet p)
     {
         for(Thread t: threads)
         {
-            if(t.getState() != Thread.State.WAITING)
+            if((t.getState() != Thread.State.WAITING) || p.anyWaiting())
                 return false;
         }
         return true;
