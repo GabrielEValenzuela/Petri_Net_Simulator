@@ -16,6 +16,9 @@
  */
 package org.petrinator.petrinet;
 
+import org.apache.commons.math3.distribution.*;
+
+import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +35,11 @@ public abstract class TransitionNode extends Node implements Cloneable
     private boolean timed = false;
     private String guard = "none";
     private double rate = 1.0;
+    private String distribution = "Exponential";
+    private double var1 = 1.0;
+    private double var2= 1.0;
+    private String label_var1 = "μ";
+    private String label_var2 = "σ²";
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -118,6 +126,63 @@ public abstract class TransitionNode extends Node implements Cloneable
     }
 
     /**
+     * Return the var1
+     *
+     * @return var1
+     */
+    public double getVar1()
+    {
+        return var1;
+    }
+
+    /**
+     * Return the var2
+     *
+     * @return var2
+     */
+    public double getVar2()
+    {
+        return var2;
+    }
+
+    /**
+     * Return the label of var1
+     *
+     * @return label_var1
+     */
+    public String getLabelVar1()
+    {
+        return label_var1;
+    }
+
+    /**
+     * Return the label of var2
+     *
+     * @return label_Var2
+     */
+    public String getLabelVar2()
+    {
+        return label_var2;
+    }
+
+    /**
+     * Return the index of distribution
+     *
+     * @return indexofdistribution
+     */
+    public int getIndexDistribution()
+    {
+        if (distribution.equals("Exponential"))
+            return 0;
+        else if (distribution.equals("Normal"))
+            return 1;
+        else if (distribution.equals("Cauchy"))
+            return 2;
+        else
+            return 3;
+    }
+
+    /**
      * Sets a new state.
      *
      * @param automatic - state to set.
@@ -175,6 +240,97 @@ public abstract class TransitionNode extends Node implements Cloneable
     public void setTime(boolean timed)
     {
         this.timed = timed;
+    }
+
+    /**
+     * Set distribution.
+     *
+     * @param distribution - distribution to set.
+     */
+    public void setDistribution(String distribution)
+    {
+        this.distribution = distribution;
+    }
+
+    /**
+     * Set var1.
+     *
+     * @param var1 - var1 to set.
+     */
+    public void setVar1(double var1)
+    {
+        this.var1 = var1;
+    }
+
+    /**
+     * Set var2.
+     *
+     * @param var2 - var2 to set.
+     */
+    public void setVar2(double var2)
+    {
+        this.var2 = var2;
+    }
+
+    /**
+     * Set label of var1.
+     *
+     * @param label_var1 - label of var1 to set.
+     */
+    public void setLabelvar1(String label_var1)
+    {
+        this.label_var1 = label_var1;
+    }
+
+    /**
+     * Set label of var2.
+     *
+     * @param label_var2 - label of var2 to set.
+     */
+    public void setLabelVar2(String label_var2)
+    {
+        this.label_var2 = label_var2;
+    }
+
+    /**
+     *
+     *
+     */
+    public double generateSample()
+    {
+        try {
+            switch (distribution) {
+
+                case "Exponential": {
+                    ExponentialDistribution transitionDistribution = new ExponentialDistribution(1 / rate);
+                    return transitionDistribution.sample();
+                }
+                case "Normal": {
+                    NormalDistribution transitionDistribution = new NormalDistribution(var1, var2);
+                    return transitionDistribution.sample();
+                }
+                case "Cauchy": {
+                    CauchyDistribution transitionDistribution = new CauchyDistribution(var1, var2);
+                    return transitionDistribution.sample();
+                }
+                case "Uniform": {
+                    UniformRealDistribution transitionDistribution = new UniformRealDistribution(var1, var2);
+                    return transitionDistribution.sample();
+                }
+                case "Log-Nomal": {
+                    LogNormalDistribution transitionDistribution = new LogNormalDistribution(var1, var2);
+                    return transitionDistribution.sample();
+                }
+                default:
+                    break;
+            }
+        }
+        catch(org.apache.commons.math3.exception.NumberIsTooLargeException nitle)
+        {
+            JOptionPane.showMessageDialog(null, "In transition "+ this.getLabel() +"lower bound (2) must be strictly less than upper bound (1)");
+        }
+
+        return 0;
     }
 
     /**

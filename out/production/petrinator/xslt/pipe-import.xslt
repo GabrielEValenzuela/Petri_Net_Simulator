@@ -59,6 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <label><xsl:value-of select="name/value"/></label>
                 <timed><xsl:value-of select="timed"/></timed>
                 <rate><xsl:value-of select="rate"/></rate>
+
                 <automatic>false</automatic>
                 <informed>true</informed>
                 <enableWhenTrue>false</enableWhenTrue>

@@ -65,6 +65,13 @@
     <xsl:for-each select="transition">
         <transition>
             <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
+
+            <label>
+                <text>
+                    <xsl:value-of select="behavior"></xsl:value-of></text>
+                <graphics>
+                    <offset x="-10" y="0"></offset></graphics></label>
+
             <name>
                 <xsl:call-template name="label">
                     <xsl:with-param name="subnetlabel"><xsl:value-of select="$label"/></xsl:with-param>
@@ -87,11 +94,6 @@
                 </delay>
             </xsl:if>
 
-            <label>
-            	<text>
-            		<xsl:value-of select="behavior"></xsl:value-of></text>
-            	<graphics>
-            		<offset x="-10" y="0"></offset></graphics></label>
             <graphics>
                 <position>
                     <xsl:attribute name="x"><xsl:value-of select="x+$x"/></xsl:attribute>

@@ -367,7 +367,7 @@ public class SimulateAction extends AbstractAction
 
                 try
                 {
-                    Thread.currentThread().sleep((int) transition.getRate());
+                    Thread.currentThread().sleep((int) transition.generateSample()*1000);//llamo a la funcion que me devuelva la muestra
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
