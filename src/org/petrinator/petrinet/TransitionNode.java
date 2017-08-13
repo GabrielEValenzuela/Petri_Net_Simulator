@@ -38,8 +38,8 @@ public abstract class TransitionNode extends Node implements Cloneable
     private String distribution = "Exponential";
     private double var1 = 1.0;
     private double var2= 1.0;
-    private String label_var1 = "μ";
-    private String label_var2 = "σ²";
+    private String label_var1 = "Rate (λ)";
+    private String label_var2 = " ";
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -181,6 +181,13 @@ public abstract class TransitionNode extends Node implements Cloneable
         else
             return 3;
     }
+
+    /**
+     * Return the name of distribution
+     *
+     * @return distribution
+     */
+    public String getDistribution() { return distribution; }
 
     /**
      * Sets a new state.

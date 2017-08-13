@@ -150,6 +150,11 @@ public class DocumentExporter {
         xmlTransition.informed = transition.isInformed();
         xmlTransition.enableWhenTrue = transition.isEnablewhentrue();
         xmlTransition.guard = transition.getGuard();
+        xmlTransition.labelVar1 = transition.getLabelVar1();
+        xmlTransition.labelVar2 = transition.getLabelVar2();
+        xmlTransition.var1 = transition.getVar1();
+        xmlTransition.var2 = transition.getVar2();
+        xmlTransition.distribution = transition.getDistribution();
         return xmlTransition;
     }
 

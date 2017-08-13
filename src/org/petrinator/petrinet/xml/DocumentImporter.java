@@ -31,6 +31,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.TransformerException;
 
+import org.mockito.internal.matchers.Null;
 import org.petrinator.petrinet.Arc;
 import org.petrinator.petrinet.Document;
 import org.petrinator.petrinet.Marking;
@@ -205,6 +206,14 @@ public class DocumentImporter {
         transition.setTime(xmlTransition.timed);
         transition.setEnableWhenTrue(xmlTransition.enableWhenTrue);
         transition.setGuard(xmlTransition.guard);
+        if (xmlTransition.labelVar1 != null && xmlTransition.labelVar2 != null && xmlTransition.distribution != null)
+        {
+            transition.setLabelvar1(xmlTransition.labelVar1);
+            transition.setLabelVar2(xmlTransition.labelVar2);
+            transition.setVar1(xmlTransition.var1);
+            transition.setVar2(xmlTransition.var2);
+            transition.setDistribution(xmlTransition.distribution);
+        }
 
         if(transition.isTimed())
             transition.setAutomatic(true);

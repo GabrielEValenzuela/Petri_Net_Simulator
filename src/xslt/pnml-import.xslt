@@ -39,6 +39,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <x><xsl:value-of select="graphics/position/@x"/></x>
                 <y><xsl:value-of select="graphics/position/@y"/></y>
                 <label><xsl:value-of select="name/value"/></label>
+                <timed><xsl:value-of select="timed"/></timed>
+                <rate><xsl:value-of select="rate"/></rate>
+                <automatic><xsl:value-of select="automatic"/></automatic>
+                <informed><xsl:value-of select="informed"/></informed>
+                <enableWhenTrue><xsl:value-of select="enableWhenTrue"/></enableWhenTrue>
+                <guard><xsl:value-of select="guard"/></guard>
+                <distribution><xsl:value-of select="stochasticProperties/@distribution"/></distribution>
+                <var1><xsl:value-of select="stochasticProperties/@var1"/></var1>
+                <var2><xsl:value-of select="stochasticProperties/@var2"/></var2>
+                <labelVar1><xsl:value-of select="stochasticProperties/@labelVar1"/></labelVar1>
+                <labelVar2><xsl:value-of select="stochasticProperties/@labelVar2"/></labelVar2>
             </transition>
         </xsl:for-each>
         <xsl:for-each select="pnml/net/arc">

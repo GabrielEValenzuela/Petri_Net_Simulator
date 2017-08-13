@@ -113,6 +113,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <fill color="rgb(255, 255, 255)"/>
                 <line color="rgb(0, 0, 0)" shape="line" style="solid" width="1"/>
             </graphics>
+            <stochasticProperties>
+                <xsl:attribute name="distribution"><xsl:value-of select="distribution"/></xsl:attribute>
+                <xsl:attribute name="labelVar1"><xsl:value-of select="labelVar1"/></xsl:attribute>
+                <xsl:attribute name="labelVar2"><xsl:value-of select="labelVar2"/></xsl:attribute>
+                <xsl:attribute name="var1"><xsl:value-of select="var1"/></xsl:attribute>
+                <xsl:attribute name="var2"><xsl:value-of select="var2"/></xsl:attribute>
+            </stochasticProperties>
         </transition>
     </xsl:for-each>
     <xsl:for-each select="arc">

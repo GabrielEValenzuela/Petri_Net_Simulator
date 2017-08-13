@@ -48,9 +48,8 @@ public class SetBehaviorAction extends AbstractAction{
                              
             JTextField field_guard = new JTextField(8);
             JTextField field_label = new JTextField(8);
-			JTextField mu = new JTextField(8);
-			JTextField field_rate = new JTextField(8);
-			JLabel Jlabel_var1 = new JLabel("μ  ");
+			//JTextField field_rate = new JTextField(8);
+			JLabel Jlabel_var1 = new JLabel("μ (1/λ)");
 			JLabel Jlabel_var2 = new JLabel("σ²  ");
 			JTextField value_var1 = new JTextField();
 			JTextField value_var2 = new JTextField();
@@ -78,8 +77,8 @@ public class SetBehaviorAction extends AbstractAction{
 			myPanel.add(new JLabel("Timed:"));
 			myPanel.add(checkBoxTimed);
 			myPanel.add(new JLabel(""));
-			myPanel.add(new JLabel("Rate:  "));
-			myPanel.add(field_rate, "wrap");
+			//myPanel.add(new JLabel("Rate (λ):  "));
+			//myPanel.add(field_rate, "wrap");
 			myPanel.add(new JLabel(""), "wrap");
 			myPanel.add(new JLabel(""), "wrap");
 			myPanel.add(new JSeparator(), "span, growx, wrap");
@@ -105,12 +104,10 @@ public class SetBehaviorAction extends AbstractAction{
 			myPanel.add(new JLabel(" "));
 			myPanel.add(value_var2,"wrap, grow");
 
-
-
 			//set in the panel the behavior of the transition.
 			field_label.setText(clickedTransition.getLabel());
 			field_guard.setText(clickedTransition.getGuard());
-			field_rate.setText(Double.toString(clickedTransition.getRate()));
+			//field_rate.setText(Double.toString(clickedTransition.getRate()));
 			checkBoxAutomatic.setSelected(clickedTransition.isAutomatic());
 			checkBoxInformed.setSelected(clickedTransition.isInformed());
 			checkBoxEnablewhentrue.setSelected(clickedTransition.isEnablewhentrue());
@@ -124,31 +121,34 @@ public class SetBehaviorAction extends AbstractAction{
 
 			if(clickedTransition.isTimed())
 			{
-				field_rate.setEnabled(true);
+				//field_rate.setEnabled(true);
 				checkBoxAutomatic.setEnabled(false);
 				comboBoxDistribution.setEnabled(true);
 				if(comboBoxDistribution.getSelectedItem().toString().equals("Exponential"))
 				{
-					value_var1.setEnabled(false);
+					value_var1.setText(Double.toString(clickedTransition.getRate()));
+					value_var1.setEnabled(true);
 					value_var2.setEnabled(false);
 				}
 			}
 			else
 			{
-				field_rate.setEnabled(false);
+				//field_rate.setEnabled(false);
 				comboBoxDistribution.setEnabled(false);
 				value_var1.setEnabled(false);
 				value_var2.setEnabled(false);
 			}
+
 			//Interrupt when the distribution change.
 			comboBoxDistribution.addActionListener (new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(comboBoxDistribution.getSelectedItem().toString().equals("Normal"))
 					{
-						Jlabel_var1.setText("μ");
+						Jlabel_var1.setText("μ (1/λ)");
 						Jlabel_var2.setText("σ²");
 						value_var1.setEnabled(true);
 						value_var2.setEnabled(true);
+						value_var1.setText(Double.toString(1/clickedTransition.getRate()));
 					}
 					else if(comboBoxDistribution.getSelectedItem().toString().equals("Cauchy"))
 					{
@@ -159,10 +159,11 @@ public class SetBehaviorAction extends AbstractAction{
 					}
 					else if(comboBoxDistribution.getSelectedItem().toString().equals("Exponential"))
 					{
-						Jlabel_var1.setText("x");
-						Jlabel_var2.setText("y");
-						value_var1.setEnabled(false);
+						Jlabel_var1.setText("Rate (λ)");
+						Jlabel_var2.setText(" ");
+						value_var1.setEnabled(true);
 						value_var2.setEnabled(false);
+						value_var1.setText(Double.toString(clickedTransition.getRate()));
 					}
 					else if(comboBoxDistribution.getSelectedItem().toString().equals("Uniform"))
 					{
@@ -177,24 +178,40 @@ public class SetBehaviorAction extends AbstractAction{
 			});
 
 
-			//Interrupt when the timed combobox change.
+			//Interrupt when the timed comboBox change.
 			checkBoxTimed.addItemListener(new ItemListener(){
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED){
 
-						field_rate.setEnabled(true);
-						field_rate.setText(Double.toString(clickedTransition.getRate()));
+						//field_rate.setEnabled(true);
+						//field_rate.setText(Double.toString(clickedTransition.getRate()));
 						checkBoxAutomatic.setEnabled(false);
 						checkBoxAutomatic.setSelected(true);
 						comboBoxDistribution.setEnabled(true);
+						Jlabel_var1.setText(clickedTransition.getLabelVar1());
+						Jlabel_var2.setText(clickedTransition.getLabelVar2());
+						comboBoxDistribution.setSelectedIndex(clickedTransition.getIndexDistribution());
+
+						if(comboBoxDistribution.getSelectedItem().toString().equals("Exponential")) {
+							value_var1.setEnabled(true);//
+							value_var1.setText(Double.toString(clickedTransition.getRate()));//
+						}
+						else
+						{
+							value_var1.setEnabled(true);//
+							value_var2.setEnabled(true);//
+							value_var1.setText(Double.toString(clickedTransition.getVar1()));
+							value_var2.setText(Double.toString(clickedTransition.getVar2()));
+						}
 					}
 					else if(e.getStateChange() == ItemEvent.DESELECTED){
-						field_rate.setEnabled(false);
-						field_rate.setText(Double.toString(clickedTransition.getRate()));
+						//field_rate.setEnabled(false);
+						//field_rate.setText(Double.toString(clickedTransition.getRate()));
 						checkBoxAutomatic.setEnabled(true);
 						comboBoxDistribution.setEnabled(false);
-
+						value_var1.setEnabled(false);//
+						value_var2.setEnabled(false);//
 					}
 					myPanel.validate();
 					myPanel.repaint();
@@ -220,15 +237,16 @@ public class SetBehaviorAction extends AbstractAction{
                	clickedTransition.setTime(timed);
 
                	//Check if the rate number is a valid number
-               	try {
-					clickedTransition.setRate(Double.parseDouble(field_rate.getText()));
-			 	}
-			   	catch(NumberFormatException e1) {
-				   JOptionPane.showMessageDialog(null, "Invalid number");
-				   return; // Don't execute further code
-			   	}
+               	//try {
+				//	clickedTransition.setRate(Double.parseDouble(field_rate.getText()));
+			 	//}
+			   	//catch(NumberFormatException e1) {
+				//   JOptionPane.showMessageDialog(null, "Invalid number");
+				//   return; // Don't execute further code
+			    //	}
 
 			   	//if a timed transition, the stochastic properties are saved
+
                	if(timed)
 			   	{
 					try
@@ -239,13 +257,8 @@ public class SetBehaviorAction extends AbstractAction{
 						label_var1 = Jlabel_var1.getText();
 						label_var2 = Jlabel_var2.getText();
 
-						if(distribution.equals("Uniform") && var1 > var2)
+						if(distribution.equals("Uniform") && var1 >= var2)
 						{
-							Jlabel_var1.setText(clickedTransition.getLabelVar1());
-							Jlabel_var2.setText(clickedTransition.getLabelVar2());
-							value_var1.setText(Double.toString(clickedTransition.getVar1()));
-							value_var2.setText(Double.toString(clickedTransition.getVar2()));
-							comboBoxDistribution.setSelectedIndex(clickedTransition.getIndexDistribution());
 							JOptionPane.showMessageDialog(null, "Lower bound must be strictly less than upper bound ");
 						}
 						else
@@ -255,13 +268,22 @@ public class SetBehaviorAction extends AbstractAction{
 							clickedTransition.setLabelvar1(label_var1);
 							clickedTransition.setLabelVar2(label_var2);
 							clickedTransition.setDistribution(distribution);
+							//if is a normal distribution set a new rate (1/media)
+							if(distribution.equals("Normal"))
+							{
+								clickedTransition.setRate(1/var1);
+							}
+							if(distribution.equals("Exponential"))
+							{
+								clickedTransition.setRate(var1);
+							}
 						}
+						//System.out.println("Distribution: " + clickedTransition.getDistribution() + ", var1: " + clickedTransition.getVar1() + ", var2: "+ clickedTransition.getVar2() + ", rate:" + clickedTransition.getRate());
 					}
 					catch (NumberFormatException n)
 					{
 						JOptionPane.showMessageDialog(null, "Invalid number.");
 					}
-
 			   	}
 			   else
 			   {

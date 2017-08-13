@@ -48,5 +48,20 @@ public class XmlTransition extends XmlNode {
     @XmlElement(name = "enableWhenTrue")
     public boolean enableWhenTrue;
 
+    @XmlElement(name = "labelVar1")
+    public String labelVar1;
+
+    @XmlElement(name = "labelVar2")
+    public String labelVar2;
+
+    @XmlElement(name = "var1")
+    public double var1;
+
+    @XmlElement(name = "var2")
+    public double var2;
+
+    @XmlElement(name = "distribution")
+    public String distribution;
+
 
 }
