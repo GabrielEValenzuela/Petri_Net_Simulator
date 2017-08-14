@@ -82,13 +82,16 @@
             </name>
 
             <xsl:if test="timed='true'">
+                <distribution>
+                    <text><xsl:value-of select="distribution"></xsl:value-of></text>
+                </distribution>
                 <delay>
                     <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
                         <cn>
-                            <xsl:value-of select="rate"></xsl:value-of>
+                            <xsl:value-of select="var1"></xsl:value-of>
                         </cn>
                         <cn>
-                            <xsl:value-of select="rate"></xsl:value-of>
+                            <xsl:value-of select="var2"></xsl:value-of>
                         </cn>
                     </interval>
                 </delay>

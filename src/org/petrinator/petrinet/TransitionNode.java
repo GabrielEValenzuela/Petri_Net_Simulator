@@ -305,7 +305,6 @@ public abstract class TransitionNode extends Node implements Cloneable
      */
     public double generateSample()
     {
-        try {
             switch (distribution) {
 
                 case "Exponential": {
@@ -331,12 +330,6 @@ public abstract class TransitionNode extends Node implements Cloneable
                 default:
                     break;
             }
-        }
-        catch(org.apache.commons.math3.exception.NumberIsTooLargeException nitle)
-        {
-            JOptionPane.showMessageDialog(null, "In transition "+ this.getLabel() +"lower bound (2) must be strictly less than upper bound (1)");
-        }
-
         return 0;
     }
 
