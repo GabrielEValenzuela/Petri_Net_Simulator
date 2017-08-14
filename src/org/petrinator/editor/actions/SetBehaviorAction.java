@@ -98,11 +98,14 @@ public class SetBehaviorAction extends AbstractAction{
 			myPanel.add(new JLabel(" "));
 			myPanel.add(Jlabel_var1);
 			myPanel.add(new JLabel(" "));
-			myPanel.add(value_var1,"wrap, grow");
+			myPanel.add(value_var1);
+			myPanel.add(new JLabel("seg."),"wrap, grow");
+
 			myPanel.add(new JLabel(" "));
 			myPanel.add(Jlabel_var2);
 			myPanel.add(new JLabel(" "));
-			myPanel.add(value_var2,"wrap, grow");
+			myPanel.add(value_var2);
+			myPanel.add(new JLabel("seg."),"wrap, grow");
 
 			//set in the panel the behavior of the transition.
 			field_label.setText(clickedTransition.getLabel());

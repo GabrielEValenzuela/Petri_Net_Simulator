@@ -16,6 +16,9 @@
  */
 package org.petrinator.petrinet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents place in Petri net
  *
@@ -24,6 +27,7 @@ package org.petrinator.petrinet;
 public class Place extends PlaceNode implements Cloneable {
 
     private boolean isStatic = false;
+    List<Integer> values = new ArrayList<Integer>();
 
     @Override
     public boolean isStatic() {
@@ -33,5 +37,30 @@ public class Place extends PlaceNode implements Cloneable {
     @Override
     public void setStatic(boolean isStatic) {
         this.isStatic = isStatic;
+    }
+
+    public void addValue(int value)
+    {
+        values.add(new Integer(value));
+    }
+
+    public void printValues()
+    {
+        System.out.print("[ ");
+        for(int i = 0; i<values.size(); i++)
+        {
+            System.out.print(values.get(i) + " ");
+        }
+        System.out.println("]");
+    }
+
+    public void clearValues()
+    {
+        values.clear();
+    }
+
+    public List<Integer> getValues()
+    {
+        return values;
     }
 }

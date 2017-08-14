@@ -318,7 +318,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
     private Action convertTransitionToSubnet;
     private Action replaceSubnet;
     private Action saveSubnetAs;
-    private Action cutAction, copyAction, pasteAction, selectAllAction;
+    private Action cutAction, copyAction, pasteAction, selectAllAction, graphPlaceAction;
     private Action matrixAction;
 
     //per application
@@ -509,6 +509,7 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         openSubnet = new OpenSubnetAction(this);
         closeSubnet = new CloseSubnetAction(this);
         delete = new DeleteAction(this);
+        graphPlaceAction = new GraphPlaceAction(this);
 
         cutAction = new CutAction(this);
         copyAction = new CopyAction(this);
@@ -682,6 +683,8 @@ public class Root implements WindowListener, ListSelectionListener, SelectionCha
         placePopup.add(setLabel);
         placePopup.add(setTokens);
         placePopup.add(setPlaceStatic);
+        placePopup.addSeparator();
+        placePopup.add(graphPlaceAction);
         placePopup.addSeparator();
         placePopup.add(cutAction);
         placePopup.add(copyAction);

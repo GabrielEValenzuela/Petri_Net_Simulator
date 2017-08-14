@@ -29,7 +29,7 @@ import org.petrinator.util.GraphicsTools;
 import org.petrinator.editor.commands.FireTransitionCommand;
 import org.petrinator.auxiliar.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
 
 import org.unc.lac.javapetriconcurrencymonitor.errors.DuplicatedNameError;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
@@ -47,9 +47,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Joaquin Felici <joaquinfelici at gmail.com>
@@ -66,6 +64,8 @@ public class SimulateAction extends AbstractAction
     private List<FileType> fileTypes;
     protected static boolean stop = false;
     ActionEvent e;
+    public static List<Double> instants = new ArrayList<Double>();
+    private boolean running = false;
 
     public SimulateAction(Root root, List<FileType> fileTypes) {
         this.root = root;
@@ -281,10 +281,19 @@ public class SimulateAction extends AbstractAction
          * will be shown in green.
          */
         new TokenSelectToolAction(root).actionPerformed(e);
+
         /*
          * We fire the net graphically
          */
+        running = true;
+        instants.clear();
+        for(Place place : root.getDocument().petriNet.getRootSubnet().getPlaces())
+        {
+            place.clearValues();
+        }
+        analyzePlaces();
         fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
+        running = false;
         System.out.println(" > Simulation ended");
         setEnabled(true);
     }
@@ -479,5 +488,35 @@ public class SimulateAction extends AbstractAction
         thread.start();
     }
 
+    public void analyzePlaces()
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                double time = 0;
+                while(running)
+                {
+                    Marking marking = root.getDocument().petriNet.getInitialMarking();
+                    Set<Place> places = root.getDocument().petriNet.getRootSubnet().getPlaces();
 
+                    for(Place place : places)
+                    {
+                        place.addValue(marking.getTokens(place));
+                    }
+
+                    instants.add(time);
+                    time += 0.5;
+
+                    try
+                    {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
 }
