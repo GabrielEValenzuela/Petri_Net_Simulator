@@ -32,6 +32,7 @@ public class Transition extends TransitionNode implements Cloneable {
 
 	static boolean showBehavior = false;
 	private boolean waiting = false;
+	Graphics g = null;
 	
     @Override
     public void draw(Graphics g, DrawingOptions drawingOptions)
@@ -50,6 +51,7 @@ public class Transition extends TransitionNode implements Cloneable {
 
     @Override
     protected void drawLabel(Graphics g) {
+        this.g = g;
         if (getLabel() != null && !getLabel().equals("")) {
 //          GraphicsTools.drawString(g, getLabel(), getCenter().x, getCenter().y, HorizontalAlignment.center, VerticalAlignment.center, new Font("Times", Font.BOLD, 24));
             GraphicsTools.drawString(g, getLabel(), getCenter().x, getEnd().y, HorizontalAlignment.center, VerticalAlignment.top);
@@ -57,9 +59,13 @@ public class Transition extends TransitionNode implements Cloneable {
         if(showBehavior)
         {
             GraphicsTools.drawString(g, getBehavior(), getCenter().x, getEnd().y+10, HorizontalAlignment.center, VerticalAlignment.top);
-
         }
-//      GraphicsTools.drawString(g, getId(), getCenter().x, getStart().y, HorizontalAlignment.center, VerticalAlignment.bottom);
+        if(this.isTimed() && waiting)
+        {
+            g.setColor(new Color(200, 0, 0));
+            GraphicsTools.drawString(g, Integer.toString(this.getTime()) + " ms", getCenter().x, getEnd().y-48, HorizontalAlignment.center, VerticalAlignment.top);
+        }
+
     }
     
     public void setShowBehavior(boolean s)

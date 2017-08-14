@@ -348,11 +348,24 @@ public class SimulateAction extends AbstractAction
                 return;
             }
 
+            System.out.println(event);
             List<String> transitionInfo = Arrays.asList(event.split(","));
             String transitionId = transitionInfo.get(2);
             transitionId = transitionId.replace("\"", "");
             transitionId = transitionId.replace("id:", "");
             transitionId = transitionId.replace("}", "");
+
+            double time = 0;
+            try
+            {
+                String _time  = transitionInfo.get(3);
+                _time = _time.replace("\"", "");
+                _time = _time.replace("time:", "");
+                _time = _time.replace("}", "");
+                time = Double.parseDouble(_time) * 1000;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {} // The transition is not timed, so no time to retrieve. No biggy.
+
 
             Transition transition = root.getDocument().petriNet.getRootSubnet().getTransition(transitionId);
             Marking marking = root.getDocument().petriNet.getInitialMarking();
@@ -362,17 +375,19 @@ public class SimulateAction extends AbstractAction
 
             if(transition.isTimed())
             {
-                //transition.setWaiting(true);
-                //root.repaintCanvas();
+                transition.setTime((int) time);
+                transition.setWaiting(true);
+                countDown(transition);
 
                 try
                 {
-                    Thread.currentThread().sleep((int) transition.generateSample()*1000);//llamo a la funcion que me devuelva la muestra
+                    System.out.println("Sleeping " + (int) time);
+                    Thread.currentThread().sleep((int) time);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
 
-                //transition.setWaiting(false);
+                transition.setWaiting(false);
             }
 
             FireTransitionCommand fire = new FireTransitionCommand(transition, marking);
@@ -436,4 +451,33 @@ public class SimulateAction extends AbstractAction
         }
         return true;
     }
+
+    public void countDown(Transition t)
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                long begin = System.currentTimeMillis();
+
+                while(t.getTime()>1)
+                {
+                    try
+                    {
+                        root.repaintCanvas();
+                        Thread.currentThread().sleep(5);
+                        t.setTime((int) (t.getTime()-(System.currentTimeMillis()-begin)));
+                        begin = System.currentTimeMillis();
+                    } catch (IllegalTransitionFiringError | IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+
 }

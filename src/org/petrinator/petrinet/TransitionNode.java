@@ -40,6 +40,7 @@ public abstract class TransitionNode extends Node implements Cloneable
     private double var2= 1.0;
     private String label_var1 = "Rate (λ)";
     private String label_var2 = " ";
+    private int time = 0;
 
     public Set<PlaceNode> getConnectedPlaceNodes()
     {
@@ -300,40 +301,6 @@ public abstract class TransitionNode extends Node implements Cloneable
     }
 
     /**
-     *
-     *
-     */
-    public double generateSample()
-    {
-            switch (distribution) {
-
-                case "Exponential": {
-                    ExponentialDistribution transitionDistribution = new ExponentialDistribution(1 / rate);
-                    return transitionDistribution.sample();
-                }
-                case "Normal": {
-                    NormalDistribution transitionDistribution = new NormalDistribution(var1, var2);
-                    return transitionDistribution.sample();
-                }
-                case "Cauchy": {
-                    CauchyDistribution transitionDistribution = new CauchyDistribution(var1, var2);
-                    return transitionDistribution.sample();
-                }
-                case "Uniform": {
-                    UniformRealDistribution transitionDistribution = new UniformRealDistribution(var1, var2);
-                    return transitionDistribution.sample();
-                }
-                case "Log-Nomal": {
-                    LogNormalDistribution transitionDistribution = new LogNormalDistribution(var1, var2);
-                    return transitionDistribution.sample();
-                }
-                default:
-                    break;
-            }
-        return 0;
-    }
-
-    /**
      * Generates behavior based on the selected configuration.
      * @param automatic value that determines if the transition is automatic.
      * @param informed value that determines if the transition is informed.
@@ -376,5 +343,15 @@ public abstract class TransitionNode extends Node implements Cloneable
         }
         behavior = "<" + statusAutomatic + "," + statusInformed + "," + "(" + statusEnablewhentrue + guardValue + ")" + ">";
         setBehavior(behavior);
+    }
+
+    public void setTime(int time)
+    {
+        this.time = time;
+    }
+
+    public int getTime()
+    {
+        return time;
     }
 }
