@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaquín Rodríguez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquï¿½n Rodrï¿½guez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -45,7 +45,8 @@ public class SelectionSelectToolAction extends AbstractAction {
 //      putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("S"));
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         root.selectTool_Select();
     }
 }

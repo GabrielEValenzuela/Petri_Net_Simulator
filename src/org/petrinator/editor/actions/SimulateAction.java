@@ -29,6 +29,8 @@ import org.petrinator.util.GraphicsTools;
 import org.petrinator.editor.commands.FireTransitionCommand;
 import org.petrinator.auxiliar.*;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.*;
 
 import org.unc.lac.javapetriconcurrencymonitor.errors.DuplicatedNameError;
@@ -291,8 +293,10 @@ public class SimulateAction extends AbstractAction
         {
             place.clearValues();
         }
-        analyzePlaces();
+        analyzePlaces(timeBetweenTransitions);
         fireGraphically(((ConcreteObserver) observer).getEvents(), timeBetweenTransitions, numberOfTransitions);
+        new SelectionSelectToolAction(root).actionPerformed(e);
+
         running = false;
         System.out.println(" > Simulation ended");
         setEnabled(true);
@@ -488,13 +492,24 @@ public class SimulateAction extends AbstractAction
         thread.start();
     }
 
-    public void analyzePlaces()
+    public void analyzePlaces(int timeBetweenTransitions)
     {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run()
             {
                 double time = 0;
+                int timeToSleep = 0;
+
+                if(root.getDocument().petriNet.getRootSubnet().anyStochastic())
+                {
+                    timeToSleep = 500;
+                }
+                else
+                {
+                    timeToSleep = timeBetweenTransitions;
+                }
+
                 while(running)
                 {
                     Marking marking = root.getDocument().petriNet.getInitialMarking();
@@ -506,11 +521,15 @@ public class SimulateAction extends AbstractAction
                     }
 
                     instants.add(time);
-                    time += 0.5;
+
+                    time += (double) timeToSleep / 1000;
+                    //System.out.println(time);
+                    time = roundDouble(time);
+                    System.out.println(time);
 
                     try
                     {
-                        Thread.sleep(500);
+                        Thread.sleep(timeToSleep);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
@@ -518,5 +537,13 @@ public class SimulateAction extends AbstractAction
             }
         });
         thread.start();
+    }
+
+    public double roundDouble(double value)
+    {
+        DecimalFormat twoDigit = new DecimalFormat("#,##0.00");
+        String format = String.format("%.2f", value);
+        System.out.println(format);
+        return Double.parseDouble(format);
     }
 }

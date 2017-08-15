@@ -27,7 +27,7 @@ import java.util.List;
 public class Place extends PlaceNode implements Cloneable {
 
     private boolean isStatic = false;
-    List<Integer> values = new ArrayList<Integer>();
+    List<Double> values = new ArrayList<Double>();
 
     @Override
     public boolean isStatic() {
@@ -41,7 +41,7 @@ public class Place extends PlaceNode implements Cloneable {
 
     public void addValue(int value)
     {
-        values.add(new Integer(value));
+        values.add(new Double(value));
     }
 
     public void printValues()
@@ -59,7 +59,7 @@ public class Place extends PlaceNode implements Cloneable {
         values.clear();
     }
 
-    public List<Integer> getValues()
+    public List<Double> getValues()
     {
         return values;
     }

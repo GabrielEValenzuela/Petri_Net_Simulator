@@ -246,6 +246,16 @@ public class Subnet extends TransitionNode {
         }
 		return null;
     }
+
+    public Place getPlace(String label)
+    {
+        for (Element element : getElements()) {
+            if (element instanceof Place && ((Place) element).getLabel().equals(label)) {
+                return (Place) element;
+            }
+        }
+        return null;
+    }
     
     public Set<Place> getPlaces() {
         Set<Place> places = new HashSet<Place>();
