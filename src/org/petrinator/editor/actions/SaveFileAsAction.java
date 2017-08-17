@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008-2010 Martin Riesz <riesz.martin at gmail.com>
- * Copyright (C) 2016-2017 Joaqu�n Rodr�guez Felici <joaquinfelici at gmail.com>
+ * Copyright (C) 2016-2017 Joaquin Rodriguez Felici <joaquinfelici at gmail.com>
  * Copyright (C) 2016-2017 Leandro Asson <leoasson at gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
