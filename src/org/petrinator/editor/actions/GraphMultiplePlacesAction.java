@@ -46,7 +46,7 @@ public class GraphMultiplePlacesAction extends AbstractAction
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(SimulateAction.instants.isEmpty())
+        if(SimulateAction.instants.size() < 2) // Only one firing cannot be displayed
         {
             JOptionPane.showMessageDialog(null, "Simulation must be run before graph can be displayed.");
             return;

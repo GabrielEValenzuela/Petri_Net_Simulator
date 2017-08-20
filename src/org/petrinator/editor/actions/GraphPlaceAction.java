@@ -55,7 +55,7 @@ public class GraphPlaceAction extends AbstractAction
     {
         Place clickedPlace = (Place) root.getClickedElement();
 
-        if(clickedPlace.getValues().isEmpty() || SimulateAction.instants.isEmpty())
+        if(clickedPlace.getValues().size() < 2 || SimulateAction.instants.size() < 2) // Only one firing cannot be displayed
         {
             JOptionPane.showMessageDialog(null, "Simulation must be run before graph can be displayed.");
             return;
