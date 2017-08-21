@@ -164,7 +164,7 @@ public class GraphPanel extends JPanel
 
                 if(i != 0) // Add point to get a squared wave
                 {
-                    int y2 = (int) ((getMaxScore() - vectors.get(k).get(i-1)) * yScale + padding);
+                    int y2 = (int) ((getMaxScore() - vectors.get(k).get(i-1)) * yScale + padding); // The point has the same x position as the new one and the same y position as the last one.
                     graphPoints.add(new Point(x1,y2));
                 }
 

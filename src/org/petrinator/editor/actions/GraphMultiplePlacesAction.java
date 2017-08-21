@@ -39,7 +39,7 @@ public class GraphMultiplePlacesAction extends AbstractAction
         this.root = root;
         String name = "Graph places history";
         putValue(NAME, name);
-        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/GenerateGraph16.png"));
+        putValue(SMALL_ICON, GraphicsTools.getIcon("pneditor/generateGraph16.png"));
         putValue(SHORT_DESCRIPTION, name);
         setEnabled(true);
     }
