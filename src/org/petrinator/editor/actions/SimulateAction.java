@@ -523,9 +523,7 @@ public class SimulateAction extends AbstractAction
                     instants.add(time);
 
                     time += (double) timeToSleep / 1000;
-                    //System.out.println(time);
                     time = roundDouble(time);
-                    System.out.println(time);
 
                     try
                     {
@@ -539,11 +537,11 @@ public class SimulateAction extends AbstractAction
         thread.start();
     }
 
-    public double roundDouble(double value)
+    public static double roundDouble(double value)
     {
-        DecimalFormat twoDigit = new DecimalFormat("#,##0.00");
-        String format = String.format("%.2f", value);
-        System.out.println(format);
-        return Double.parseDouble(format);
+        long factor = (long) Math.pow(10, 2);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }
